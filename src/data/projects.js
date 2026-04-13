@@ -32,7 +32,7 @@ export const projects = [
   {
     id: "innodays",
     year: "2025",
-    title: "InnoDays Hackathon — 1. Platz",
+    title: "InnoDays Hackathon – 1. Platz",
     description:
       "Team-Prototyp zur Kristallrückgewinnung mit Bilderkennung und Robotik. 48 Stunden.",
     tags: ["Hackathon", "Computer Vision", "Robotik"],

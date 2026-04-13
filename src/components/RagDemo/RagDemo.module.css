@@ -36,28 +36,13 @@
   flex-wrap: wrap;
 }
 
-.select {
-  flex: 1;
-  min-width: 200px;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--fg);
+.question {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
-  padding: 10px 14px;
-  cursor: pointer;
-  transition: border-color 0.2s;
-  appearance: none;
-}
-
-.select:focus {
-  outline: none;
-  border-color: var(--fg-muted);
-}
-
-.select option {
-  background: var(--bg);
+  font-size: 0.9rem;
   color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  flex: 1;
 }
 
 .startBtn {
@@ -81,7 +66,7 @@
   cursor: not-allowed;
 }
 
-/* Pipeline - vertical */
+/* Pipeline */
 .pipeline {
   display: flex;
   flex-direction: column;
@@ -89,39 +74,15 @@
 
 .step {
   display: flex;
-  flex-direction: column;
-}
-
-.connector {
-  position: relative;
-  width: 44px;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  margin-left: 6px;
-}
-
-.connectorLine {
-  width: 1px;
-  height: 100%;
-  background: var(--border);
-}
-
-.particle {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--fg);
-  box-shadow: 0 0 8px rgba(229, 229, 229, 0.5);
-}
-
-.row {
-  display: flex;
-  align-items: flex-start;
   gap: var(--space-md);
+}
+
+.nodeCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 44px;
 }
 
 .node {
@@ -147,17 +108,25 @@
   line-height: 1;
 }
 
+.line {
+  width: 1px;
+  flex: 1;
+  min-height: 20px;
+  background: var(--border);
+}
+
 .info {
-  padding-top: 4px;
-  min-height: 44px;
+  padding-top: 8px;
+  padding-bottom: var(--space-md);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  min-height: 44px;
 }
 
 .stageName {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--fg-muted);
   transition: color 0.3s;
 }
@@ -167,9 +136,23 @@
 }
 
 .detail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 460px;
+}
+
+.output {
   font-family: var(--font-mono);
   font-size: 0.75rem;
+  color: var(--fg);
+  line-height: 1.5;
+  padding: 6px 10px;
+  border-left: 2px solid var(--fg-muted);
+}
+
+.explain {
+  font-size: 0.8rem;
   color: var(--fg-muted);
   line-height: 1.6;
-  max-width: 420px;
 }

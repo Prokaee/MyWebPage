@@ -16,7 +16,7 @@ export default function About() {
           <FadeIn delay={0.1}>
             <div className={styles.prose}>
               <p>
-                Hey! Ich bin Michael — und mein Weg in die Informatik war alles
+                Hey! Ich bin Michael, und mein Weg in die Informatik war alles
                 andere als geradlinig. Erst Bäckerlehre, dann Matura über den
                 zweiten Bildungsweg, Ergotherapie-Studium, und irgendwann hat's
                 Klick gemacht: Ich will das mit den Computern machen.
@@ -24,14 +24,14 @@ export default function About() {
               <p>
                 Jetzt studiere ich Informatik in Innsbruck und fühle mich zum
                 ersten Mal genau am richtigen Platz. Mich begeistert alles rund
-                um Linux, Container und wie man Dinge zum Laufen bringt — am
+                um Linux, Container und wie man Dinge zum Laufen bringt, am
                 liebsten mit Docker und einem guten Terminal.
               </p>
               <p>
                 Gerade schreibe ich meine Bachelorarbeit über
                 Multi-Agenten-Systeme mit LangGraph und ChromaDB. Klingt
                 kompliziert, macht aber richtig Spaß. In letzter Zeit
-                arbeite ich auch gerne mit KI-Tools wie Claude Code —
+                arbeite ich auch gerne mit KI-Tools wie Claude Code,
                 ein super Sparringspartner beim Entwickeln.
               </p>
               <p>

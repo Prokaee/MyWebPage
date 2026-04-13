@@ -89,18 +89,31 @@
   transform: rotate(-45deg) translate(2px, -3px);
 }
 
+/* Mobile overlay is a portal-like approach:
+   Because .nav has transform, fixed children break.
+   So we use position + viewport units to escape. */
 @media (max-width: 768px) {
+  .nav {
+    max-width: 100%;
+    left: 0;
+    transform: none;
+    padding: var(--space-sm) var(--space-md);
+  }
+
   .hamburger {
     display: flex;
+    position: relative;
+    z-index: 1001;
   }
 
   .links {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--bg);
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    background: #0a0a0a;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -116,6 +129,6 @@
   }
 
   .links a {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 }
