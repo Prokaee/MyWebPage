@@ -30,10 +30,12 @@ export default function About() {
               <p>
                 Gerade schreibe ich meine Bachelorarbeit über
                 Multi-Agenten-Systeme mit LangGraph und ChromaDB. Klingt
-                kompliziert, macht aber richtig Spaß.
+                kompliziert, macht aber richtig Spaß. In letzter Zeit
+                arbeite ich auch gerne mit KI-Tools wie Claude Code —
+                ein super Sparringspartner beim Entwickeln.
               </p>
               <p>
-                Wenn ich nicht am Rechner sitze, bin ich am Fels beim Klettern,
+                Wenn ich nicht am Rechner sitze, bin ich in der Kletterhalle,
                 am Tisch bei DnD oder sortiere mein Magic-Deck zum hundertsten
                 Mal um.
               </p>

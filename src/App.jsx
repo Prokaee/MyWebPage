@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import ParticleBackground from "./components/ParticleBackground/ParticleBackground";
 import Nav from "./components/Nav/Nav";
 import Hero from "./components/Hero/Hero";
+import RagDemo from "./components/RagDemo/RagDemo";
 import About from "./components/About/About";
 import Skills from "./components/Skills/Skills";
 import Projects from "./components/Projects/Projects";
@@ -43,6 +44,7 @@ export default function App() {
       <Nav activeSection={activeSection} />
       <main className="stripe">
         <Hero />
+        <RagDemo />
         <About />
         <Skills />
         <Projects />
