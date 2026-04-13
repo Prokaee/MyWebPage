@@ -47,13 +47,8 @@
 
 .iDot {
   position: absolute;
-<<<<<<< HEAD
   top: -0.65em;
   left: 55%;
-=======
-  top: -0.05em;
-  left: 50%;
->>>>>>> d7ce27dccda724efd7968a45728b6ab3d48cd4d8
   transform: translateX(-50%);
 }
 
