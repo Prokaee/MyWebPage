@@ -38,8 +38,16 @@
   transition: filter 0.4s;
 }
 
+:global(html.inverted) .photo {
+  filter: grayscale(1) contrast(1.05) invert(1);
+}
+
 .photo:hover {
   filter: grayscale(0);
+}
+
+:global(html.inverted) .photo:hover {
+  filter: grayscale(0) invert(1);
 }
 
 .facts {

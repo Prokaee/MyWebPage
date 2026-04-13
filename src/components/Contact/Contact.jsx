@@ -44,6 +44,13 @@ export default function Contact() {
             </a>
           </div>
         </FadeIn>
+
+        <FadeIn delay={0.4}>
+          <p className={styles.freelance}>
+            Du brauchst eine Webseite, AI-Automatisierungen oder ein
+            RAG-System? Meld dich gerne, ich mach das auch freiberuflich :)
+          </p>
+        </FadeIn>
       </div>
     </section>
   );

@@ -1,0 +1,86 @@
+.dot {
+  position: relative;
+  width: clamp(16px, 2.2vw, 24px);
+  height: clamp(16px, 2.2vw, 24px);
+  border-radius: 50%;
+  background: var(--fg);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.3s, transform 0.15s ease-out;
+}
+
+/* Ripple rings on click */
+.ripple {
+  position: fixed;
+  z-index: 9997;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--fg);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  animation: rippleExpand 0.8s ease-out forwards;
+}
+
+@keyframes rippleExpand {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.6;
+  }
+  100% {
+    width: 120px;
+    height: 120px;
+    opacity: 0;
+  }
+}
+
+/* Hint tooltip */
+.hint {
+  position: absolute;
+  bottom: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  text-align: center;
+  animation: hintFade 5s ease-in-out both;
+  pointer-events: none;
+}
+
+.hintArrow {
+  font-size: 1rem;
+  line-height: 1;
+  animation: bounceDown 1.5s ease-in-out infinite;
+}
+
+@keyframes hintFade {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: white;
+  mix-blend-mode: difference;
+  clip-path: circle(0px at 0px 0px);
+}

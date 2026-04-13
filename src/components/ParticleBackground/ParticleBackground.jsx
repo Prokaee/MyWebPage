@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import styles from "./ParticleBackground.module.css";
 
-const PARTICLE_COUNT = 60;
-const CONNECT_DISTANCE = 100;
+const PARTICLE_COUNT = 200;
+const CONNECT_DISTANCE = 200;
 const MOUSE_RADIUS = 200;
-const REPEL_STRENGTH = 0.008;
+const REPEL_STRENGTH = 0.0008;
 
 export default function ParticleBackground() {
   const canvasRef = useRef(null);
@@ -85,7 +85,9 @@ export default function ParticleBackground() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(229, 229, 229, ${p.opacity})`;
+        const isLight = document.documentElement.classList.contains("light");
+        const c = isLight ? "30, 30, 30" : "229, 229, 229";
+        ctx.fillStyle = `rgba(${c}, ${p.opacity})`;
         ctx.fill();
       }
 
@@ -100,7 +102,9 @@ export default function ParticleBackground() {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(229, 229, 229, ${opacity})`;
+            const isL = document.documentElement.classList.contains("light");
+            const cl = isL ? "30, 30, 30" : "229, 229, 229";
+            ctx.strokeStyle = `rgba(${cl}, ${opacity})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }

@@ -11,7 +11,7 @@
 }
 
 .scrolled {
-  background: rgba(10, 10, 10, 0.9);
+  background: var(--nav-bg);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
@@ -113,7 +113,7 @@
     width: 100vw;
     height: 100vh;
     z-index: 1000;
-    background: #0a0a0a;
+    background: var(--bg);
     flex-direction: column;
     align-items: center;
     justify-content: center;
