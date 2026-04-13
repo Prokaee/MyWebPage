@@ -3,6 +3,8 @@
   --fg: #e5e5e5;
   --fg-muted: #777777;
   --border: rgba(229, 229, 229, 0.12);
+  --stripe-bg: rgba(10, 10, 10, 0.85);
+  --nav-bg: rgba(10, 10, 10, 0.9);
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
   --space-xs: 0.5rem;
@@ -10,6 +12,15 @@
   --space-md: 2rem;
   --space-lg: 4rem;
   --space-xl: 8rem;
+}
+
+html.light {
+  --bg: #f0f0f0;
+  --fg: #1a1a1a;
+  --fg-muted: #555555;
+  --border: rgba(0, 0, 0, 0.12);
+  --stripe-bg: rgba(240, 240, 240, 0.9);
+  --nav-bg: rgba(240, 240, 240, 0.9);
 }
 
 *,
@@ -33,6 +44,7 @@ body {
   background: var(--bg);
   line-height: 1.6;
   font-size: 16px;
+  transition: background 0.3s, color 0.3s;
 }
 
 body::after {
@@ -43,7 +55,6 @@ body::after {
   opacity: 0.035;
   pointer-events: none;
   z-index: 9999;
-  mix-blend-mode: overlay;
 }
 
 img {
@@ -54,7 +65,7 @@ img {
 a {
   color: var(--fg);
   text-decoration: none;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, color 0.3s;
 }
 
 a:hover {
@@ -71,10 +82,11 @@ a:hover {
   z-index: 1;
   max-width: 900px;
   margin: 0 auto;
-  background: rgba(10, 10, 10, 0.85);
+  background: var(--stripe-bg);
   border-left: 1px solid var(--border);
   border-right: 1px solid var(--border);
   backdrop-filter: blur(4px);
+  transition: background 0.3s;
 }
 
 .container {

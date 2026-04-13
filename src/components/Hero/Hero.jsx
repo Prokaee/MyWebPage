@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import StatusIndicator from "../shared/StatusIndicator";
+import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { meta } from "../../data/meta";
 import styles from "./Hero.module.css";
 
@@ -33,11 +34,28 @@ export default function Hero() {
         >
           {nameLines.map((line, li) => (
             <span key={li} className={styles.nameLine}>
-              {line.split("").map((char, ci) => (
-                <motion.span key={`${li}-${ci}`} variants={charVariants}>
-                  {char}
-                </motion.span>
-              ))}
+              {line.split("").map((char, ci) => {
+                // Replace the "i" dot in "Michael" (index 1 = "i")
+                if (li === 0 && ci === 1) {
+                  return (
+                    <motion.span
+                      key={`${li}-${ci}`}
+                      variants={charVariants}
+                      className={styles.iChar}
+                    >
+                      <span className={styles.iBase}>ı</span>
+                      <span className={styles.iDot}>
+                        <ThemeToggle />
+                      </span>
+                    </motion.span>
+                  );
+                }
+                return (
+                  <motion.span key={`${li}-${ci}`} variants={charVariants}>
+                    {char}
+                  </motion.span>
+                );
+              })}
             </span>
           ))}
         </motion.h1>
