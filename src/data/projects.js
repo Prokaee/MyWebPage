@@ -2,9 +2,9 @@ export const projects = [
   {
     id: "bachelor-thesis",
     year: "2026",
-    title: "Multi-Agent Research System",
+    title: "Multi-Agenten-System",
     description:
-      "Bachelor thesis: autonomous research agents using LangGraph, ChromaDB vector store, and MCP tool integration. Dockerized services with bash deployment scripts.",
+      "Bachelorarbeit: Forschungsagenten mit LangGraph, ChromaDB und MCP. Dockerisiert, Deployment per Bash-Skripte.",
     tags: ["Python", "LangGraph", "ChromaDB", "Docker"],
     link: null,
     featured: true,
@@ -12,9 +12,9 @@ export const projects = [
   {
     id: "telemetry-dashboard",
     year: "2025",
-    title: "Telemetry Dashboard",
+    title: "Telemetrie-Dashboard",
     description:
-      "System architecture with Docker containers, cloud deployment on AWS, and latency measurements for real-time data visualization.",
+      "Systemarchitektur mit Docker-Containern, Cloud-Deployment auf AWS, Latenzmessungen.",
     tags: ["Docker", "AWS", "Python"],
     link: null,
     featured: false,
@@ -24,7 +24,7 @@ export const projects = [
     year: "2025",
     title: "Campus Tirol Motorsport",
     description:
-      "Vehicle telemetry pipeline with containerized data processing. Cross-functional collaboration across engineering disciplines.",
+      "Fahrzeugtelemetrie-Pipeline mit containerisierter Datenverarbeitung.",
     tags: ["Docker", "Data Pipeline"],
     link: null,
     featured: false,
@@ -32,10 +32,10 @@ export const projects = [
   {
     id: "innodays",
     year: "2025",
-    title: "InnoDays Hackathon — 1st Place",
+    title: "InnoDays Hackathon — 1. Platz",
     description:
-      "Interdisciplinary team prototype for crystal recovery using image recognition and robotics. Built in 48 hours.",
-    tags: ["Hackathon", "Computer Vision", "Robotics"],
+      "Team-Prototyp zur Kristallrückgewinnung mit Bilderkennung und Robotik. 48 Stunden.",
+    tags: ["Hackathon", "Computer Vision", "Robotik"],
     link: null,
     featured: true,
   },

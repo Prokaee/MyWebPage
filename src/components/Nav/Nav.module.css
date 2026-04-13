@@ -1,15 +1,17 @@
 .nav {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 900px;
   z-index: 100;
   padding: var(--space-sm) 0;
   transition: background 0.3s, backdrop-filter 0.3s;
 }
 
 .scrolled {
-  background: rgba(10, 10, 10, 0.8);
+  background: rgba(10, 10, 10, 0.9);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }

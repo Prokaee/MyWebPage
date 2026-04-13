@@ -92,6 +92,36 @@
   margin-top: 4px;
 }
 
+.peek {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  margin-top: 8px;
+  align-self: flex-start;
+}
+
+.peek:hover {
+  color: var(--fg);
+  border-color: var(--fg-muted);
+}
+
+.preview {
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.previewImg {
+  width: 100%;
+  max-width: 320px;
+  border: 1px solid var(--border);
+  display: block;
+}
+
 @media (max-width: 768px) {
   .entry {
     grid-template-columns: 16px 1fr;

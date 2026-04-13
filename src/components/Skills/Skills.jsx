@@ -8,16 +8,13 @@ export default function Skills() {
     <section id="skills" className={styles.section}>
       <div className="container">
         <FadeIn>
-          <SectionHeading index={2} title="Skills" />
+          <SectionHeading index={2} title="Kenntnisse" />
         </FadeIn>
 
         <div className={styles.grid}>
           {skills.map((skill, i) => (
-            <FadeIn key={skill.name} delay={i * 0.05}>
-              <div
-                className={styles.cell}
-                style={{ gridColumn: skill.span === 2 ? "span 2" : "span 1" }}
-              >
+            <FadeIn key={skill.name} delay={i * 0.04}>
+              <div className={`${styles.cell} ${styles[skill.size]}`}>
                 <span className={styles.name}>{skill.name}</span>
                 {skill.context && (
                   <span className={styles.context}>{skill.context}</span>

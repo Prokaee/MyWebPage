@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ParticleBackground from "./components/ParticleBackground/ParticleBackground";
 import Nav from "./components/Nav/Nav";
 import Hero from "./components/Hero/Hero";
 import About from "./components/About/About";
@@ -38,8 +39,9 @@ export default function App() {
 
   return (
     <>
+      <ParticleBackground />
       <Nav activeSection={activeSection} />
-      <main>
+      <main className="stripe">
         <Hero />
         <About />
         <Skills />

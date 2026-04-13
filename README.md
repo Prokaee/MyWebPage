@@ -1,16 +1,84 @@
-# React + Vite
+# michaelprokop.dev
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio website — black & white, minimal, editorial.
 
-Currently, two official plugins are available:
+## Quick Start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+Opens at `http://localhost:5173`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Build for Production
 
-## Expanding the ESLint configuration
+```bash
+npm run build
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Static output goes to `dist/`. Serve it with any web server (Caddy, Nginx, etc.).
+
+## Project Structure
+
+```
+src/
+├── data/                  # Content lives here — edit these to update the site
+│   ├── meta.js            # Name, tagline, email, social links, status message
+│   ├── projects.js        # Project entries (add new ones here)
+│   ├── skills.js          # Skills grid data
+│   └── timeline.js        # CV timeline (education, experience, achievements)
+├── components/
+│   ├── Nav/               # Fixed top nav with scroll blur + mobile hamburger
+│   ├── Hero/              # Full-viewport intro with animated name
+│   ├── About/             # Bio + quick facts sidebar
+│   ├── Skills/            # Bento grid layout
+│   ├── Projects/          # Data-driven project list
+│   ├── Timeline/          # Vertical CV timeline
+│   ├── Contact/           # Email + social links
+│   ├── Footer/            # Minimal footer
+│   └── shared/            # Reusable components (FadeIn, SectionHeading, StatusIndicator)
+├── App.jsx                # Root component, section scroll tracking
+├── main.jsx               # Entry point
+└── index.css              # Global styles, CSS variables, fonts, grain overlay
+```
+
+## Adding a New Project
+
+Edit `src/data/projects.js` and add an object to the array:
+
+```js
+{
+  id: "my-project",
+  year: "2026",
+  title: "Project Name",
+  description: "One or two sentences about the project.",
+  tags: ["React", "Docker"],
+  link: "https://github.com/...",  // or null
+  featured: true,                   // bold title treatment
+}
+```
+
+No component changes needed.
+
+## Tech Stack
+
+- **React** + **Vite** — fast dev & builds
+- **CSS Modules** — scoped styles, zero dependencies
+- **Framer Motion** — scroll reveals and hero animation
+- **Inter + JetBrains Mono** — Google Fonts
+
+## Deployment (Raspberry Pi)
+
+1. Build locally: `npm run build`
+2. Copy `dist/` to your Pi
+3. Serve with Caddy:
+
+```
+yourdomain.dev {
+    root * /var/www/portfolio/dist
+    file_server
+    encode gzip
+    try_files {path} /index.html
+}
+```

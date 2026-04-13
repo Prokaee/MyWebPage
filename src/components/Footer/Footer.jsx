@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={`container ${styles.inner}`}>
         <span>&copy; 2026 Michael Prokop</span>
-        <span className={styles.built}>Built with React</span>
+        <span className={styles.built}>Gebaut mit React</span>
       </div>
     </footer>
   );

@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import styles from "./Nav.module.css";
 
 const links = [
-  { id: "about", label: "About" },
+  { id: "about", label: "Über mich" },
   { id: "skills", label: "Skills" },
-  { id: "projects", label: "Projects" },
-  { id: "timeline", label: "Timeline" },
-  { id: "contact", label: "Contact" },
+  { id: "projects", label: "Projekte" },
+  { id: "timeline", label: "Werdegang" },
+  { id: "contact", label: "Kontakt" },
 ];
 
 export default function Nav({ activeSection }) {

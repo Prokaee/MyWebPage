@@ -27,11 +27,11 @@
   letter-spacing: -0.03em;
   line-height: 1.05;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
-.space {
-  width: 0.25em;
+.nameLine {
+  display: flex;
 }
 
 .tagline {

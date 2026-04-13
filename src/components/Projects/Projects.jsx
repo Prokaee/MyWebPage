@@ -9,7 +9,7 @@ export default function Projects() {
     <section id="projects" className={styles.section}>
       <div className="container">
         <FadeIn>
-          <SectionHeading index={3} title="Projects" />
+          <SectionHeading index={3} title="Projekte" />
         </FadeIn>
 
         <div className={styles.list}>
@@ -40,7 +40,7 @@ export default function Projects() {
                       rel="noopener noreferrer"
                       className={styles.link}
                     >
-                      View project &rarr;
+                      Zum Projekt &rarr;
                     </a>
                   )}
                 </div>

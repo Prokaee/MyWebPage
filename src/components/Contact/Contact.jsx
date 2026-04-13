@@ -8,13 +8,13 @@ export default function Contact() {
     <section id="contact" className={styles.section}>
       <div className="container">
         <FadeIn>
-          <SectionHeading index={5} title="Contact" />
+          <SectionHeading index={5} title="Kontakt" />
         </FadeIn>
 
         <FadeIn delay={0.1}>
           <p className={styles.intro}>
-            Got a question, a project idea, or just want to say hi? Drop me a
-            line.
+            Lust auf ein Gespräch, eine Idee, oder einfach Hallo sagen?
+            Ich freu mich über jede Nachricht.
           </p>
         </FadeIn>
 
