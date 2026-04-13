@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState, useRef, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import styles from "./ThemeToggle.module.css";
@@ -48,6 +49,19 @@ export default function ThemeToggle() {
   const toggle = useCallback(() => {
     if (expanding) return;
     setHintDismissed(true);
+=======
+import { useState, useRef, useCallback } from "react";
+import styles from "./ThemeToggle.module.css";
+
+export default function ThemeToggle() {
+  const [light, setLight] = useState(false);
+  const [expanding, setExpanding] = useState(false);
+  const dotRef = useRef(null);
+  const overlayRef = useRef(null);
+
+  const toggle = useCallback(() => {
+    if (expanding) return;
+>>>>>>> d7ce27dccda724efd7968a45728b6ab3d48cd4d8
     setExpanding(true);
 
     const dot = dotRef.current;
@@ -59,6 +73,7 @@ export default function ThemeToggle() {
       Math.max(x, window.innerWidth - x),
       Math.max(y, window.innerHeight - y)
     );
+<<<<<<< HEAD
     const r = maxDist + 50;
 
     const overlay = overlayRef.current;
@@ -90,12 +105,45 @@ export default function ThemeToggle() {
         setExpanding(false);
       };
     }
+=======
+
+    const overlay = overlayRef.current;
+    overlay.style.setProperty("--cx", `${x}px`);
+    overlay.style.setProperty("--cy", `${y}px`);
+    overlay.style.setProperty("--r", `${maxDist + 50}px`);
+
+    // Expanding overlay is always the color we're going TO
+    overlay.style.background = light ? "#0a0a0a" : "#f0f0f0";
+    overlay.classList.add(styles.expanding);
+
+    overlay.addEventListener("animationend", () => {
+      // Swap the theme while overlay covers everything
+      if (light) {
+        document.documentElement.classList.remove("light");
+      } else {
+        document.documentElement.classList.add("light");
+      }
+
+      // Now collapse the overlay to reveal the new theme
+      overlay.classList.remove(styles.expanding);
+      overlay.style.background = light ? "#0a0a0a" : "#f0f0f0";
+      overlay.classList.add(styles.collapsing);
+
+      overlay.addEventListener("animationend", () => {
+        overlay.classList.remove(styles.collapsing);
+        overlay.style.background = "transparent";
+        setLight(!light);
+        setExpanding(false);
+      }, { once: true });
+    }, { once: true });
+>>>>>>> d7ce27dccda724efd7968a45728b6ab3d48cd4d8
   }, [light, expanding]);
 
   return (
     <>
       <button
         ref={dotRef}
+<<<<<<< HEAD
         className={styles.dot}
         onClick={toggle}
         aria-label="Theme wechseln"
@@ -111,6 +159,16 @@ export default function ThemeToggle() {
         <div ref={overlayRef} className={styles.overlay} />,
         document.body
       )}
+=======
+        className={`${styles.dot} ${light ? styles.dotLight : ""}`}
+        onClick={toggle}
+        aria-label="Theme wechseln"
+        title="Klick mich :)"
+      >
+        <span className={styles.glow} />
+      </button>
+      <div ref={overlayRef} className={styles.overlay} />
+>>>>>>> d7ce27dccda724efd7968a45728b6ab3d48cd4d8
     </>
   );
 }

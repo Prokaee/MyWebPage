@@ -1,7 +1,12 @@
 .dot {
   position: relative;
+<<<<<<< HEAD
   width: clamp(16px, 2.2vw, 24px);
   height: clamp(16px, 2.2vw, 24px);
+=======
+  width: clamp(12px, 1.8vw, 18px);
+  height: clamp(12px, 1.8vw, 18px);
+>>>>>>> d7ce27dccda724efd7968a45728b6ab3d48cd4d8
   border-radius: 50%;
   background: var(--fg);
   border: none;
@@ -10,6 +15,7 @@
   align-items: center;
   justify-content: center;
   z-index: 10;
+<<<<<<< HEAD
   transition: background 0.3s, transform 0.15s ease-out;
 }
 
@@ -75,12 +81,56 @@
   50% { transform: translateY(4px); }
 }
 
+=======
+  transition: background 0.3s;
+}
+
+.glow {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, currentColor 0%, transparent 70%);
+  opacity: 0.25;
+  animation: pulse 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.25; }
+  50% { transform: scale(1.8); opacity: 0; }
+}
+
+/* Overlay */
+>>>>>>> d7ce27dccda724efd7968a45728b6ab3d48cd4d8
 .overlay {
   position: fixed;
   inset: 0;
   z-index: 9998;
   pointer-events: none;
+<<<<<<< HEAD
   background: white;
   mix-blend-mode: difference;
   clip-path: circle(0px at 0px 0px);
+=======
+  clip-path: circle(0px at var(--cx) var(--cy));
+  background: transparent;
+}
+
+.expanding {
+  animation: expand 0.5s ease-out forwards;
+}
+
+.collapsing {
+  animation: collapse 0.5s ease-in forwards;
+}
+
+@keyframes expand {
+  from { clip-path: circle(0px at var(--cx) var(--cy)); }
+  to { clip-path: circle(var(--r) at var(--cx) var(--cy)); }
+}
+
+@keyframes collapse {
+  from { clip-path: circle(var(--r) at var(--cx) var(--cy)); }
+  to { clip-path: circle(0px at var(--cx) var(--cy)); }
+>>>>>>> d7ce27dccda724efd7968a45728b6ab3d48cd4d8
 }
