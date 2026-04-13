@@ -1,0 +1,16 @@
+export const skills = [
+  { name: "Linux", context: "Arch, daily driver", span: 2 },
+  { name: "Docker", context: "Production use", span: 2 },
+  { name: "Kubernetes", context: "Basics", span: 1 },
+  { name: "Python", context: "LangChain, LangGraph", span: 2 },
+  { name: "CI/CD", context: "GitHub Actions", span: 1 },
+  { name: "AWS", context: "EC2, S3", span: 1 },
+  { name: "React", context: "This site", span: 1 },
+  { name: "Java", context: null, span: 1 },
+  { name: "C", context: null, span: 1 },
+  { name: "SQL", context: null, span: 1 },
+  { name: "Git", context: null, span: 1 },
+  { name: "Shell", context: "Bash, PowerShell", span: 1 },
+  { name: "Networking", context: "TCP/IP, DNS, VLANs", span: 2 },
+  { name: "LaTeX", context: null, span: 1 },
+];
