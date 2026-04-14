@@ -24,6 +24,12 @@ export default function Contact() {
           </a>
         </FadeIn>
 
+        <FadeIn delay={0.25}>
+          <a href={`tel:${meta.phone.replace(/\s/g, "")}`} className={styles.email}>
+            {meta.phone}
+          </a>
+        </FadeIn>
+
         <FadeIn delay={0.3}>
           <div className={styles.links}>
             <a
