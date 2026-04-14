@@ -16,7 +16,7 @@ export default function About() {
           <FadeIn delay={0.1}>
             <div className={styles.prose}>
               <p>
-                Hey! Ich bin Michael, und mein Weg in die Informatik war alles
+                Hey! Ich bin Michael Baujahr 1995, und mein Weg in die Informatik war alles
                 andere als geradlinig. Erst Bäckerlehre, dann Matura über den
                 zweiten Bildungsweg, Ergotherapie-Studium, und irgendwann hat's
                 Klick gemacht: Ich will das mit den Computern machen.
