@@ -29,10 +29,9 @@ export default function About() {
               </p>
               <p>
                 Gerade schreibe ich meine Bachelorarbeit über
-                Multi-Agenten-Systeme mit LangGraph und ChromaDB. Klingt
-                kompliziert, macht aber richtig Spaß. In letzter Zeit
-                arbeite ich auch gerne mit KI-Tools wie Claude Code,
-                ein super Sparringspartner beim Entwickeln.
+                Multi-Agenten-Systeme mit LangGraph, ChromaDB und MCP –
+                autonome Agenten die über entkoppelte RAG-Architekturen
+                kommunizieren. Klingt kompliziert, macht aber richtig Spaß.
               </p>
               <p>
                 Wenn ich nicht am Rechner sitze, bin ich in der Kletterhalle,

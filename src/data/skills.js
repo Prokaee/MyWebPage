@@ -1,22 +1,24 @@
 export const skillClusters = [
   {
-    id: "java-c",
-    name: "Java / C",
-    context: "Spring, Pthreads, OpenMP, Systemnah",
+    id: "python",
+    name: "Python",
+    context: "LangChain, LangGraph, FastAPI",
     children: [
-      { name: "SQL", context: null },
-      { name: "React", context: null },
-      { name: "Git", context: null },
-      { name: "LaTeX", context: null },
+      { name: "RAG", context: "ChromaDB, FAISS" },
+      { name: "MCP", context: null },
+      { name: "scikit-learn", context: null },
     ],
   },
   {
-    id: "python",
-    name: "Python",
-    context: "LangChain, LangGraph",
+    id: "java-c",
+    name: "Java / C",
+    context: "Spring Boot, OpenMP, Systemnah",
     children: [
-      { name: "RAG", context: "Bachelorarbeit" },
-      { name: "MCP", context: null },
+      { name: "SQL", context: "PostgreSQL" },
+      { name: "React", context: "Next.js, Vite" },
+      { name: "TypeScript", context: null },
+      { name: "Git", context: null },
+      { name: "LaTeX", context: null },
     ],
   },
   {
