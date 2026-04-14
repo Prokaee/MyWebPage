@@ -4,14 +4,10 @@ import styles from "./ParticleBackground.module.css";
 const PARTICLE_COUNT = 200;
 const CONNECT_DISTANCE = 300;
 const MOUSE_RADIUS = 100;
-const REPEL_STRENGTH = 0.0008;
+const REPEL_STRENGTH = 0.002;
 const SIZE = 3;
 
-const IS_MOBILE = !window.matchMedia("(pointer: fine)").matches && window.innerWidth < 768;
-
 export default function ParticleBackground() {
-  if (IS_MOBILE) return null;
-
   const canvasRef = useRef(null);
 
   useEffect(() => {
