@@ -30,20 +30,15 @@
 }
 
 .logo {
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
 }
 
-.cursor {
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
+.logoImg {
+  height: 32px;
+  width: 32px;
+  border-radius: 6px;
+  filter: none !important;
 }
 
 .links {

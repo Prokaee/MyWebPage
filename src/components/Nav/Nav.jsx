@@ -23,7 +23,7 @@ export default function Nav({ activeSection }) {
     <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ""}`}>
       <div className={`container ${styles.inner}`}>
         <a href="#" className={styles.logo}>
-          mp<span className={styles.cursor}>_</span>
+          <img src="/favicon.svg" alt="MP" className={styles.logoImg} />
         </a>
 
         <button

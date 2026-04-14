@@ -1,4 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
   <rect width="48" height="48" rx="8" fill="#0a0a0a"/>
-  <text x="24" y="33" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="22" fill="#e5e5e5">MP</text>
+  <!-- M left vertical -->
+  <line x1="6" y1="10" x2="6" y2="38" stroke="#e5e5e5" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- M left diagonal -->
+  <line x1="6" y1="10" x2="20" y2="26" stroke="#e5e5e5" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- M right diagonal to shared stroke -->
+  <line x1="20" y1="26" x2="30" y2="10" stroke="#e5e5e5" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Shared vertical stroke (M right + P vertical) -->
+  <line x1="30" y1="10" x2="30" y2="38" stroke="#e5e5e5" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- P bowl -->
+  <path d="M30,10 C44,10 44,24 30,24" fill="none" stroke="#e5e5e5" stroke-width="3.5" stroke-linecap="round"/>
 </svg>
