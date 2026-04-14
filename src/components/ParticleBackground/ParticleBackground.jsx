@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./ParticleBackground.module.css";
 
 const PARTICLE_COUNT = 200;
@@ -6,9 +6,25 @@ const CONNECT_DISTANCE = 300;
 const MOUSE_RADIUS = 100;
 const REPEL_STRENGTH = 0.0008;
 const SIZE = 3;
+const MOBILE_BREAKPOINT = 768;
+
+function isMobileDevice() {
+  const narrowScreen = window.innerWidth < MOBILE_BREAKPOINT;
+  const touchOnly = "ontouchstart" in window && !window.matchMedia("(pointer: fine)").matches;
+  return narrowScreen || touchOnly;
+}
 
 export default function ParticleBackground() {
   const canvasRef = useRef(null);
+  const [hidden, setHidden] = useState(isMobileDevice);
+
+  useEffect(() => {
+    const check = () => setHidden(isMobileDevice());
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  if (hidden) return null;
 
   useEffect(() => {
     const canvas = canvasRef.current;
