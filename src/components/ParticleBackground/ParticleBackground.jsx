@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 import styles from "./ParticleBackground.module.css";
 
-const PARTICLE_COUNT = 200;
+const PARTICLE_COUNT = 150;
 const CONNECT_DISTANCE = 200;
 const MOUSE_RADIUS = 200;
 const REPEL_STRENGTH = 0.0008;
+const SIZE = 3;
 
 export default function ParticleBackground() {
   const canvasRef = useRef(null);
@@ -38,7 +39,7 @@ export default function ParticleBackground() {
       vy: (Math.random() - 0.5) * 0.15,
       baseVx: (Math.random() - 0.5) * 0.15,
       baseVy: (Math.random() - 0.5) * 0.15,
-      size: Math.random() * 2.5 + 1,
+      size: Math.random() * SIZE + 1,
       opacity: Math.random() * 0.3 + 0.08,
     }));
 

@@ -3,70 +3,120 @@
   border-top: 1px solid var(--border);
 }
 
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.cell {
-  border: 1px solid var(--border);
+.clusters {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: var(--space-lg);
+}
+
+/* Root cluster node */
+.root {
+  border: 1px solid var(--border);
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  flex-direction: column;
   gap: 4px;
   transition: border-color 0.3s, transform 0.3s;
 }
 
-.cell:hover {
+.root:hover {
   border-color: var(--fg-muted);
   transform: translateY(-2px);
 }
 
-.lg {
-  padding: var(--space-md) var(--space-lg);
-  min-height: 100px;
-}
-
-.lg .name {
-  font-size: 1.2rem;
-}
-
-.md {
-  padding: var(--space-sm) var(--space-md);
-  min-height: 70px;
-}
-
-.md .name {
-  font-size: 1rem;
-}
-
-.sm {
-  padding: var(--space-xs) var(--space-sm);
-}
-
-.sm .name {
-  font-size: 0.85rem;
-}
-
-.name {
+.rootName {
   font-family: var(--font-mono);
+  font-size: 1.3rem;
   font-weight: 400;
 }
 
-.context {
+.rootContext {
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+}
+
+/* Tree connector */
+.tree {
+  position: relative;
+  margin-left: 24px;
+  padding-top: var(--space-sm);
+  padding-left: 20px;
+}
+
+/* Vertical trunk line */
+.tree::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 12px;
+  width: 1px;
+  background: var(--border);
+}
+
+/* Each child branch */
+.branch {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  padding: 4px 0;
+  position: relative;
+}
+
+/* Horizontal branch stub */
+.branch::before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  width: 12px;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Small dot at junction */
+.branch::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  border: 1px solid var(--fg-muted);
+  background: var(--bg);
+}
+
+.childName {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.childContext {
   font-size: 0.7rem;
   color: var(--fg-muted);
   font-family: var(--font-mono);
 }
 
 @media (max-width: 768px) {
-  .lg {
+  .root {
     padding: var(--space-sm) var(--space-md);
-    min-height: auto;
   }
 
-  .md {
-    min-height: auto;
+  .tree {
+    margin-left: 16px;
+    padding-left: 16px;
+  }
+
+  .branch::before {
+    left: -16px;
+    width: 8px;
+  }
+
+  .branch::after {
+    left: -8px;
   }
 }
