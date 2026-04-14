@@ -50,6 +50,16 @@ export const projects = [
     featured: true,
   },
   {
+    id: "gmail-mcp",
+    year: "2025",
+    title: "Gmail MCP Server",
+    description:
+      "MCP-Server zum Versenden von E-Mails über Gmail. OAuth2-Authentifizierung mit automatischem Token-Refresh. Gebaut für die Integration mit Claude Code und anderen MCP-kompatiblen KI-Tools.",
+    tags: ["Python", "MCP", "Gmail API", "OAuth2"],
+    link: "https://github.com/Prokaee/gmail-mcp-server",
+    featured: false,
+  },
+  {
     id: "clickdummy",
     year: "2026",
     title: "Fußball-Livestream-Plattform",
