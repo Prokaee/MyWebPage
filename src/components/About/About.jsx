@@ -49,6 +49,7 @@ export default function About() {
                   src={mePhoto}
                   alt="Michael Prokop"
                   className={styles.photo}
+                  loading="lazy"
                 />
               </div>
               <div className={styles.facts}>
