@@ -6,7 +6,7 @@ export const projects = [
     description:
       "Bachelorarbeit: Autonome Forschungsagenten mit LangGraph, ChromaDB und MCP. Vergleich monolithischer RAG- vs. MCP-entkoppelter RAG-Architekturen. Dockerisiert, Deployment per Bash-Skripte.",
     tags: ["Python", "LangGraph", "ChromaDB", "MCP", "Docker"],
-    link: "https://github.com/Prokaee/Bachelors-Thesis---Pilot-Project",
+    link: null,
     featured: true,
   },
   {
