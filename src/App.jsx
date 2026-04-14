@@ -1,15 +1,14 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect } from "react";
 import ParticleBackground from "./components/ParticleBackground/ParticleBackground";
 import Nav from "./components/Nav/Nav";
 import Hero from "./components/Hero/Hero";
-
-const RagDemo = lazy(() => import("./components/RagDemo/RagDemo"));
-const About = lazy(() => import("./components/About/About"));
-const Skills = lazy(() => import("./components/Skills/Skills"));
-const Projects = lazy(() => import("./components/Projects/Projects"));
-const Timeline = lazy(() => import("./components/Timeline/Timeline"));
-const Contact = lazy(() => import("./components/Contact/Contact"));
-const Footer = lazy(() => import("./components/Footer/Footer"));
+import RagDemo from "./components/RagDemo/RagDemo";
+import About from "./components/About/About";
+import Skills from "./components/Skills/Skills";
+import Projects from "./components/Projects/Projects";
+import Timeline from "./components/Timeline/Timeline";
+import Contact from "./components/Contact/Contact";
+import Footer from "./components/Footer/Footer";
 
 const sectionIds = ["about", "skills", "projects", "timeline", "contact"];
 
@@ -45,18 +44,14 @@ export default function App() {
       <Nav activeSection={activeSection} />
       <main className="stripe">
         <Hero />
-        <Suspense fallback={null}>
-          <RagDemo />
+        <RagDemo />
           <About />
           <Skills />
           <Projects />
           <Timeline />
           <Contact />
-        </Suspense>
       </main>
-      <Suspense fallback={null}>
-        <Footer />
-      </Suspense>
+      <Footer />
     </>
   );
 }

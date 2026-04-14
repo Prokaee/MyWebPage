@@ -69,7 +69,7 @@ export default function ThemeToggle() {
           { clipPath: `circle(0px at ${x}px ${y}px)` },
           { clipPath: `circle(${r}px at ${x}px ${y}px)` },
         ],
-        { duration: 700, easing: "ease-in-out", fill: "forwards" }
+        { duration: 1200, easing: "ease-in-out", fill: "forwards" }
       ).onfinish = () => {
         document.documentElement.classList.add("inverted");
         setLight(true);
@@ -81,7 +81,7 @@ export default function ThemeToggle() {
           { clipPath: `circle(${r}px at ${x}px ${y}px)` },
           { clipPath: `circle(0px at ${x}px ${y}px)` },
         ],
-        { duration: 700, easing: "ease-in-out", fill: "forwards" }
+        { duration: 1200, easing: "ease-in-out", fill: "forwards" }
       ).onfinish = () => {
         document.documentElement.classList.remove("inverted");
         setLight(false);

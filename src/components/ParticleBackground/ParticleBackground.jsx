@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import styles from "./ParticleBackground.module.css";
 
-const PARTICLE_COUNT = 200;
-const CONNECT_DISTANCE = 300;
+const PARTICLE_COUNT = 80;
+const CONNECT_DISTANCE = 200;
 const MOUSE_RADIUS = 100;
 const REPEL_STRENGTH = 0.002;
 const SIZE = 3;
@@ -106,7 +106,7 @@ export default function ParticleBackground() {
             const isL = document.documentElement.classList.contains("light");
             const cl = isL ? "30, 30, 30" : "229, 229, 229";
             ctx.strokeStyle = `rgba(${cl}, ${opacity})`;
-            ctx.lineWidth = 0.5;
+            ctx.lineWidth = 1.2;
             ctx.stroke();
           }
         }
@@ -115,9 +115,10 @@ export default function ParticleBackground() {
       animationId = requestAnimationFrame(draw);
     };
 
-    draw();
+    const startDelay = setTimeout(() => draw(), 500);
 
     return () => {
+      clearTimeout(startDelay);
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouseMove);

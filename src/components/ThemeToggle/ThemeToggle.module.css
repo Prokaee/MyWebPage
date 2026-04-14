@@ -56,4 +56,6 @@
   background: white;
   mix-blend-mode: difference;
   clip-path: circle(0px at 0px 0px);
+  will-change: clip-path;
+  contain: strict;
 }
