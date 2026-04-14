@@ -16,6 +16,13 @@
   border-bottom: 1px solid var(--border);
 }
 
+@media (max-width: 768px) {
+  .scrolled {
+    backdrop-filter: none;
+    background: var(--bg);
+  }
+}
+
 .inner {
   display: flex;
   align-items: center;
