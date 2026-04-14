@@ -40,8 +40,8 @@ export default function ThemeToggle() {
 
   // Hint timing
   useEffect(() => {
-    const t1 = setTimeout(() => setHintVisible(true), 2000);
-    const t2 = setTimeout(() => setHintVisible(false), 7000);
+    const t1 = setTimeout(() => setHintVisible(true), 1000);
+    const t2 = setTimeout(() => setHintVisible(false), 6000);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
