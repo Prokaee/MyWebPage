@@ -1,6 +1,6 @@
 export const meta = {
   name: "Michael Prokop",
-  tagline: "Informatik-Student · Innsbruck",
+  tagline: "Freelance Developer · Informatik-Student · Innsbruck",
   email: "Michaelprokop.studium@gmail.com",
   github: "https://github.com/Prokaee",
   linkedin: "https://linkedin.com/in/michael-prokop-software",
