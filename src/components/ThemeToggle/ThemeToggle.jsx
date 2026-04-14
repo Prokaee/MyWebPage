@@ -59,7 +59,7 @@ export default function ThemeToggle() {
       Math.max(x, window.innerWidth - x),
       Math.max(y, window.innerHeight - y)
     );
-    const r = maxDist + 50;
+    const r = maxDist * 1.5;
 
     const overlay = overlayRef.current;
 
