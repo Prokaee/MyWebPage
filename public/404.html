@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Michael Prokop</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0a;
+      color: #e5e5e5;
+      font-family: "JetBrains Mono", monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .header p {
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    canvas {
+      border: 1px solid rgba(229,229,229,0.12);
+      display: block;
+    }
+
+    .info {
+      margin-top: 1rem;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      font-size: 0.8rem;
+      color: #777;
+    }
+
+    .score {
+      color: #e5e5e5;
+      font-weight: 700;
+    }
+
+    .back {
+      margin-top: 1.5rem;
+      color: #777;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .back:hover { color: #e5e5e5; }
+
+    .mobile-controls {
+      display: none;
+      margin-top: 1rem;
+      gap: 0.5rem;
+    }
+
+    .mobile-controls button {
+      width: 3rem;
+      height: 3rem;
+      background: rgba(229,229,229,0.08);
+      border: 1px solid rgba(229,229,229,0.12);
+      color: #e5e5e5;
+      font-size: 1.2rem;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .mobile-controls button:active {
+      background: rgba(229,229,229,0.15);
+    }
+
+    @media (max-width: 500px) {
+      canvas { width: 300px; height: 300px; }
+      .header h1 { font-size: 2rem; }
+      .mobile-controls { display: grid; grid-template-areas: ". up ." "left down right"; grid-template-columns: repeat(3, 3rem); justify-content: center; }
+      .mobile-controls .up { grid-area: up; }
+      .mobile-controls .down { grid-area: down; }
+      .mobile-controls .left { grid-area: left; }
+      .mobile-controls .right { grid-area: right; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>404</h1>
+    <p>Seite nicht gefunden — spiel stattdessen Snake</p>
+  </div>
+
+  <canvas id="game" width="400" height="400"></canvas>
+
+  <div class="info">
+    <span>Score: <span class="score" id="score">0</span></span>
+    <span>Pfeiltasten zum Steuern</span>
+  </div>
+
+  <div class="mobile-controls">
+    <button class="up" data-dir="up">&#9650;</button>
+    <button class="left" data-dir="left">&#9664;</button>
+    <button class="down" data-dir="down">&#9660;</button>
+    <button class="right" data-dir="right">&#9654;</button>
+  </div>
+
+  <a href="/" class="back">&larr; zurueck zur Startseite</a>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const scoreEl = document.getElementById("score");
+
+    const gridSize = 20;
+    const tileCount = canvas.width / gridSize;
+
+    let snake = [{ x: 10, y: 10 }];
+    let food = { x: 15, y: 15 };
+    let dx = 0, dy = 0;
+    let score = 0;
+    let running = true;
+    let started = false;
+    let speed = 120;
+
+    function placeFood() {
+      food = {
+        x: Math.floor(Math.random() * tileCount),
+        y: Math.floor(Math.random() * tileCount),
+      };
+      for (const seg of snake) {
+        if (seg.x === food.x && seg.y === food.y) return placeFood();
+      }
+    }
+
+    function reset() {
+      snake = [{ x: 10, y: 10 }];
+      dx = 0; dy = 0;
+      score = 0;
+      started = false;
+      running = true;
+      speed = 120;
+      scoreEl.textContent = "0";
+      placeFood();
+    }
+
+    function draw() {
+      // Background
+      ctx.fillStyle = "#0a0a0a";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Grid
+      ctx.strokeStyle = "rgba(229,229,229,0.04)";
+      for (let i = 0; i < tileCount; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * gridSize, 0);
+        ctx.lineTo(i * gridSize, canvas.height);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, i * gridSize);
+        ctx.lineTo(canvas.width, i * gridSize);
+        ctx.stroke();
+      }
+
+      // Food
+      ctx.fillStyle = "#e5e5e5";
+      ctx.fillRect(food.x * gridSize + 2, food.y * gridSize + 2, gridSize - 4, gridSize - 4);
+
+      // Snake
+      snake.forEach((seg, i) => {
+        ctx.fillStyle = i === 0 ? "#e5e5e5" : "rgba(229,229,229,0.5)";
+        ctx.fillRect(seg.x * gridSize + 1, seg.y * gridSize + 1, gridSize - 2, gridSize - 2);
+      });
+
+      if (!started) {
+        ctx.fillStyle = "rgba(10,10,10,0.7)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#e5e5e5";
+        ctx.font = "16px 'JetBrains Mono'";
+        ctx.textAlign = "center";
+        ctx.fillText("Pfeiltaste druecken zum Starten", canvas.width / 2, canvas.height / 2);
+      }
+
+      if (!running) {
+        ctx.fillStyle = "rgba(10,10,10,0.7)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#e5e5e5";
+        ctx.font = "bold 24px 'JetBrains Mono'";
+        ctx.textAlign = "center";
+        ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2 - 15);
+        ctx.font = "14px 'JetBrains Mono'";
+        ctx.fillText("Score: " + score, canvas.width / 2, canvas.height / 2 + 15);
+        ctx.fillText("Enter zum Neustarten", canvas.width / 2, canvas.height / 2 + 40);
+      }
+    }
+
+    function update() {
+      if (!running || !started) return;
+
+      const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+      // Wall collision
+      if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+        running = false;
+        return;
+      }
+
+      // Self collision
+      for (const seg of snake) {
+        if (seg.x === head.x && seg.y === head.y) {
+          running = false;
+          return;
+        }
+      }
+
+      snake.unshift(head);
+
+      if (head.x === food.x && head.y === food.y) {
+        score++;
+        scoreEl.textContent = score;
+        placeFood();
+        if (speed > 60) speed -= 2;
+      } else {
+        snake.pop();
+      }
+    }
+
+    function setDirection(dir) {
+      if (!running && dir !== "enter") return;
+
+      switch (dir) {
+        case "up":    if (dy !== 1)  { dx = 0; dy = -1; started = true; } break;
+        case "down":  if (dy !== -1) { dx = 0; dy = 1;  started = true; } break;
+        case "left":  if (dx !== 1)  { dx = -1; dy = 0; started = true; } break;
+        case "right": if (dx !== -1) { dx = 1; dy = 0;  started = true; } break;
+        case "enter": if (!running) reset(); break;
+      }
+    }
+
+    document.addEventListener("keydown", (e) => {
+      const map = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right", Enter: "enter" };
+      if (map[e.key]) {
+        e.preventDefault();
+        setDirection(map[e.key]);
+      }
+    });
+
+    document.querySelectorAll(".mobile-controls button").forEach((btn) => {
+      btn.addEventListener("click", () => setDirection(btn.dataset.dir));
+    });
+
+    function gameLoop() {
+      update();
+      draw();
+      setTimeout(gameLoop, speed);
+    }
+
+    placeFood();
+    gameLoop();
+  </script>
+</body>
+</html>
