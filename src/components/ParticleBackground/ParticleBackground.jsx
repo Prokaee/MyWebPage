@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import styles from "./ParticleBackground.module.css";
 
-const PARTICLE_COUNT = 150;
-const CONNECT_DISTANCE = 200;
+const PARTICLE_COUNT = 200;
+const CONNECT_DISTANCE = 300;
 const MOUSE_RADIUS = 100;
 const REPEL_STRENGTH = 0.0008;
 const SIZE = 3;
