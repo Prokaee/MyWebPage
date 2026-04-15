@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ParticleBackground from "./components/ParticleBackground/ParticleBackground";
+import ScrollProgress from "./components/ScrollProgress/ScrollProgress";
 import Nav from "./components/Nav/Nav";
 import Hero from "./components/Hero/Hero";
 import RagDemo from "./components/RagDemo/RagDemo";
@@ -41,6 +42,7 @@ export default function App() {
   return (
     <>
       <ParticleBackground />
+      <ScrollProgress />
       <Nav activeSection={activeSection} />
       <main className="stripe">
         <Hero />

@@ -16,19 +16,7 @@ export default function ParticleBackground() {
     let animationId;
     let mouse = { x: -1000, y: -1000 };
 
-    const dpr = window.devicePixelRatio || 1;
-
-    const resize = () => {
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      canvas.style.width = window.innerWidth + "px";
-      canvas.style.height = window.innerHeight + "px";
-      ctx.scale(dpr, dpr);
-    };
-
-    resize();
-    window.addEventListener("resize", resize);
-
+    const dpr = () => window.devicePixelRatio || 1;
     const w = () => window.innerWidth;
     const h = () => window.innerHeight;
 
@@ -42,6 +30,34 @@ export default function ParticleBackground() {
       size: Math.random() * SIZE + 1,
       opacity: Math.random() * 0.3 + 0.08,
     }));
+
+    let prevW = w();
+    let prevH = h();
+
+    const resize = () => {
+      const newW = w();
+      const newH = h();
+
+      const d = dpr();
+      canvas.width = newW * d;
+      canvas.height = newH * d;
+      canvas.style.width = newW + "px";
+      canvas.style.height = newH + "px";
+      ctx.setTransform(d, 0, 0, d, 0, 0);
+
+      const sx = newW / prevW;
+      const sy = newH / prevH;
+      for (const p of particles) {
+        p.x *= sx;
+        p.y *= sy;
+      }
+
+      prevW = newW;
+      prevH = newH;
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
 
     const onMouseMove = (e) => {
       mouse.x = e.clientX;

@@ -1,9 +1,20 @@
+import { useState } from "react";
 import SectionHeading from "../shared/SectionHeading";
 import FadeIn from "../shared/FadeIn";
 import { meta } from "../../data/meta";
 import styles from "./Contact.module.css";
 
 export default function Contact() {
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = (e) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(meta.email).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   return (
     <section id="contact" className={styles.section}>
       <div className="container">
@@ -19,9 +30,10 @@ export default function Contact() {
         </FadeIn>
 
         <FadeIn delay={0.2}>
-          <a href={`mailto:${meta.email}`} className={styles.email}>
-            {meta.email}
-          </a>
+          <button onClick={copyEmail} className={styles.email} title="Klick zum Kopieren">
+            <span className={copied ? styles.labelHidden : styles.label}>{meta.email}</span>
+            <span className={copied ? styles.label : styles.labelHidden}>Kopiert!</span>
+          </button>
         </FadeIn>
 
         <FadeIn delay={0.25}>
