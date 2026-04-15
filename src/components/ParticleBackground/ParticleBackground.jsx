@@ -115,6 +115,16 @@ export default function ParticleBackground() {
       animationId = requestAnimationFrame(draw);
     };
 
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationId);
+      } else {
+        animationId = requestAnimationFrame(draw);
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
     const startDelay = setTimeout(() => draw(), 500);
 
     return () => {
@@ -123,8 +133,9 @@ export default function ParticleBackground() {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseleave", onMouseLeave);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   }, []);
 
-  return <canvas ref={canvasRef} className={styles.canvas} />;
+  return <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />;
 }

@@ -27,7 +27,7 @@ export default function Timeline() {
                   <span className={styles.dot} />
                 </div>
                 <div className={styles.right}>
-                  <h3 className={styles.title}>{entry.title}</h3>
+                  <h3 className={styles.title} data-period={entry.period}>{entry.title}</h3>
                   <span className={styles.institution}>
                     {entry.institution}
                   </span>

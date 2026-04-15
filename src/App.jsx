@@ -45,11 +45,11 @@ export default function App() {
       <main className="stripe">
         <Hero />
         <RagDemo />
-          <About />
-          <Skills />
-          <Projects />
-          <Timeline />
-          <Contact />
+        <About />
+        <Skills />
+        <Projects />
+        <Timeline />
+        <Contact />
       </main>
       <Footer />
     </>

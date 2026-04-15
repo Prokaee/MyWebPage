@@ -29,7 +29,8 @@ export default function Nav({ activeSection }) {
         <button
           className={`${styles.hamburger} ${menuOpen ? styles.open : ""}`}
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
+          aria-label="Menü öffnen"
+          aria-expanded={menuOpen}
         >
           <span />
           <span />
