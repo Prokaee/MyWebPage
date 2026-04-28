@@ -10,6 +10,16 @@ export const projects = [
     featured: true,
   },
   {
+    id: "f1-telemetry",
+    year: "2026",
+    title: "F1 Telemetry Challenge — Lange Nacht der Forschung",
+    description:
+      "Formula-1-Telemetriesystem basierend auf verteilten Systemen und Cloud Computing. Bei der Langen Nacht der Forschung 2026 als interaktive Challenge live gegangen — Teilnehmende traten um Amazon-Gutscheine an. Entwickelt mit Lucas Griesser und Luca Jenewein, unterstützt durch die DPS-Gruppe der Uni Innsbruck.",
+    tags: ["Distributed Systems", "Cloud", "Telemetry", "Python"],
+    link: "https://github.com/DukeLuc3010/LNDF_F1_Telemetry",
+    featured: true,
+  },
+  {
     id: "ctm-quizbot",
     year: "2025",
     title: "CTM Quizbot – RAG Q&A",
