@@ -4,9 +4,10 @@ export const projects = [
     year: "2026",
     title: "Multi-Agenten-System",
     description:
-      "Bachelorarbeit: Autonome Forschungsagenten mit LangGraph, ChromaDB und MCP. Vergleich monolithischer RAG- vs. MCP-entkoppelter RAG-Architekturen. Dockerisiert, Deployment per Bash-Skripte.",
+      "Abgeschlossene Bachelorarbeit: Autonome Forschungsagenten mit LangGraph, ChromaDB und MCP. Vergleich monolithischer RAG- vs. MCP-entkoppelter RAG-Architekturen. Dockerisiert, Deployment per Bash-Skripte.",
     tags: ["Python", "LangGraph", "ChromaDB", "MCP", "Docker"],
-    link: null,
+    link: "/architecture.html",
+    linkLabel: "Architektur ansehen →",
     featured: true,
   },
   {

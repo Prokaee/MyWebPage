@@ -28,10 +28,12 @@ export default function About() {
                 liebsten mit Docker und einem guten Terminal.
               </p>
               <p>
-                Gerade schreibe ich meine Bachelorarbeit über
-                Multi-Agenten-Systeme mit LangGraph, ChromaDB und MCP –
-                autonome Agenten die über entkoppelte RAG-Architekturen
-                kommunizieren. Klingt kompliziert, macht aber richtig Spaß.
+                Meine Bachelorarbeit über Multi-Agenten-Systeme mit LangGraph,
+                ChromaDB und MCP habe ich abgeschlossen – autonome Agenten die
+                über entkoppelte RAG-Architekturen kommunizieren. Klingt
+                kompliziert, hat aber richtig Spaß gemacht. Aktuell bin ich als
+                Wissenschaftlicher Mitarbeiter an der Uni Innsbruck und gebe
+                Workshops zu n8n und Workflow-Automatisierung.
               </p>
               <p>
                 Wenn ich nicht am Rechner sitze, bin ich in der Kletterhalle,

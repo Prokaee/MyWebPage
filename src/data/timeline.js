@@ -2,6 +2,14 @@ import malerei1 from "../assets/malerei1.jpg";
 
 export const timeline = [
   {
+    period: "Mai 2026 – heute",
+    title: "Wissenschaftlicher Mitarbeiter",
+    institution: "Universität Innsbruck",
+    description:
+      "Workshops zu n8n und Workflow-Automatisierung. Konzeption und Durchführung praxisnaher Schulungen für Mitarbeitende und Studierende.",
+    type: "erfahrung",
+  },
+  {
     period: "2023 – heute",
     title: "BSc Informatik",
     institution: "Universität Innsbruck",

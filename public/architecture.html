@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aeriscalus — System Architecture</title>
+
+<!-- Match the portfolio site typography (mirrors index.html) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap"
+  rel="stylesheet"
+/>
+
+<!-- Apply persisted theme before paint (mirrors frontend/src/app/layout.tsx) -->
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("aeriscalus-theme");
+      document.documentElement.className = t === "light" ? "light" : "dark";
+    } catch (e) { /* localStorage unavailable — keep dark default */ }
+  })();
+</script>
+
+<style>
+  /* ── Design tokens — monochrome, matched to the portfolio site (src/index.css) ──
+     Brand accent is now monochrome (light). The four functional status colors
+     (info/warning/success/error) are intentionally KEPT — the legend and the three
+     diagrams encode node/edge categories purely by color, so dropping them would
+     make the diagrams unreadable. Everything else is black / white / grey. ── */
+  :root {
+    --surface-0: #0a0a0a;   /* bg-primary    */
+    --surface-1: #141414;   /* bg-secondary  */
+    --surface-2: #1c1c1c;   /* bg-tertiary   */
+    --surface-3: #2c2c2c;   /* bg-quaternary / borders */
+    --accent: #e5e5e5;
+    --accent-light: #ffffff;
+    --accent-muted: #232323;
+    --text-primary: #e5e5e5;
+    --text-secondary: #999999;
+    --text-muted: #777777;
+    --status-success: #22c55e;
+    --status-warning: #f59e0b;
+    --status-error: #ef4444;
+    --status-info: #3b82f6;
+    --violet: #a78bfa;
+    --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono", "Fira Code", "SFMono-Regular", Consolas, monospace;
+    --radius-card: 0.75rem;
+    --radius-sm: 0.375rem;
+  }
+  .light {
+    --surface-0: #ffffff;
+    --surface-1: #f5f5f5;
+    --surface-2: #ebebeb;
+    --surface-3: #d6d6d6;
+    --accent: #1a1a1a;
+    --accent-light: #000000;
+    --accent-muted: #ececec;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555555;
+    --text-muted: #777777;
+    --violet: #6d28d9;
+  }
+
+  * , *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--surface-0);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* subtle top glow — monochrome haze */
+  body::before {
+    content: ""; position: fixed; inset: 0 0 auto 0; height: 460px; z-index: 0;
+    background: radial-gradient(120% 100% at 50% -20%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%);
+    pointer-events: none;
+  }
+  .light body::before { opacity: .5; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 40px 28px 80px; position: relative; z-index: 1; }
+
+  code { font-family: var(--font-mono); font-size: 0.92em; color: var(--accent); }
+  .muted { color: var(--text-muted); }
+  .secondary { color: var(--text-secondary); }
+
+  /* ── Kicker / headings (deck typography vocabulary) ─────────────────── */
+  .kicker {
+    font-size: 0.8rem; font-weight: 500; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+
+  /* ── Hero ───────────────────────────────────────────────────────────── */
+  header.hero { position: relative; padding: 14px 0 8px; }
+  header.hero h1 {
+    font-size: 3.4rem; font-weight: 600; letter-spacing: -0.025em; line-height: 1.02;
+    margin: 14px 0 0;
+    background: linear-gradient(92deg, var(--text-primary) 30%, var(--accent));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  header.hero .lede { font-size: 1.18rem; color: var(--text-secondary); max-width: 820px; margin: 16px 0 0; line-height: 1.45; }
+  header.hero .credits { margin-top: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; font-size: 0.95rem; }
+  header.hero .credits .name { color: var(--text-primary); font-weight: 500; }
+  header.hero .credits .sep { color: var(--surface-3); }
+  header.hero .credits .sup { color: var(--text-muted); font-size: 0.88rem; }
+
+  .theme-toggle {
+    position: absolute; top: 8px; right: 0; cursor: pointer; width: 42px; height: 42px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px; background: var(--surface-1);
+    border: 1px solid var(--surface-3); color: var(--text-secondary);
+    transition: all .15s ease;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-muted); }
+  .theme-toggle svg { width: 20px; height: 20px; }
+  .dark .theme-toggle .sun { display: none; }
+  .light .theme-toggle .moon { display: none; }
+
+  /* ── Tech stack pills ───────────────────────────────────────────────── */
+  .stack { display: flex; flex-wrap: wrap; gap: 8px; margin: 30px 0 0; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: var(--font-mono); font-size: 0.74rem;
+    padding: 5px 11px; border-radius: var(--radius-sm);
+    background: var(--surface-2); color: var(--text-secondary);
+    border: 1px solid var(--surface-3);
+  }
+
+  /* ── Legend ─────────────────────────────────────────────────────────── */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 18px 40px;
+    background: var(--surface-1); border: 1px solid var(--surface-3);
+    border-radius: var(--radius-card); padding: 16px 22px; margin: 30px 0 0;
+  }
+  .legend .group { display: flex; flex-direction: column; gap: 9px; }
+  .legend .group h4 { margin: 0; font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted); font-weight: 700; }
+  .legend .row { display: flex; flex-wrap: wrap; gap: 16px; }
+  .legend .item { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-secondary); }
+  .legend .swatch { width: 28px; height: 16px; border-radius: 4px; border: 2px solid; background: var(--surface-2); flex: none; }
+  .legend .ln { width: 32px; height: 0; border-top-width: 2.5px; flex: none; }
+
+  /* ── View sections ──────────────────────────────────────────────────── */
+  section.view { margin-top: 56px; break-inside: avoid; }
+  .view-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .view-head .num {
+    font-family: var(--font-mono); font-size: 0.74rem; color: var(--surface-0);
+    background: var(--accent); border-radius: 6px; padding: 3px 9px; font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .view-head h2 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  section.view > p.cap { margin: 10px 0 18px; color: var(--text-secondary); font-size: 0.92rem; max-width: 940px; line-height: 1.5; }
+
+  .figure {
+    background: var(--surface-1); border: 1px solid var(--surface-3);
+    border-radius: var(--radius-card); padding: 26px;
+    position: relative; overflow: hidden;
+  }
+  .figure::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent 65%); }
+  .figure svg { width: 100%; height: auto; display: block; }
+
+  /* stat strip */
+  .stats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .stat { background: var(--surface-2); border: 1px solid var(--surface-3); border-radius: var(--radius-sm);
+    padding: 9px 14px; display: flex; flex-direction: column; }
+  .stat b { font-size: 1.1rem; color: var(--accent); font-family: var(--font-mono); }
+  .stat span { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+
+  /* ── SVG shared classes ─────────────────────────────────────────────── */
+  .node { fill: var(--surface-2); stroke-width: 2; }
+  .n-info   { stroke: var(--status-info); }
+  .n-accent { stroke: var(--accent); }
+  .n-warn   { stroke: var(--status-warning); }
+  .n-ok     { stroke: var(--status-success); }
+  .n-term   { fill: var(--surface-3); stroke: var(--text-muted); }
+  .boundary { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 7 6; }
+
+  .n-title { font: 700 13px var(--font-sans); fill: var(--text-primary); }
+  .n-sub   { font: 10px var(--font-mono); fill: var(--text-secondary); }
+  .n-big   { font: 700 15px var(--font-sans); fill: var(--text-primary); }
+
+  .flow        { fill: none; stroke: var(--text-secondary); stroke-width: 2; }
+  .edge-approve{ fill: none; stroke: var(--status-success); stroke-width: 2.2; }
+  .loop        { fill: none; stroke-width: 2; stroke-dasharray: 6 5; }
+  .loop-inner  { stroke: var(--status-warning); }
+  .loop-outer  { stroke: var(--accent); }
+  .edge-reject { fill: none; stroke: var(--status-error); stroke-width: 2; stroke-dasharray: 6 5; }
+
+  .e-label {
+    font: 11px var(--font-mono); fill: var(--text-secondary);
+    paint-order: stroke; stroke: var(--surface-1); stroke-width: 4px; stroke-linejoin: round;
+  }
+  .lane-label { font: 600 11px var(--font-mono); paint-order: stroke; stroke: var(--surface-1); stroke-width: 4px; stroke-linejoin: round; }
+  .ll-inner { fill: var(--status-warning); }
+  .ll-outer { fill: var(--accent); }
+  .annot { font: italic 10px var(--font-mono); fill: var(--text-muted); }
+  .bnd-label { font: 700 12px var(--font-mono); fill: var(--accent); }
+
+  /* ── HTML band layout (View 2) ──────────────────────────────────────── */
+  .layers { display: flex; flex-direction: column; gap: 0; }
+  .band {
+    border: 1px solid var(--surface-3); background: var(--surface-2);
+    border-radius: var(--radius-card); padding: 15px 18px; position: relative;
+  }
+  .band.ext { border-style: dashed; background: var(--surface-1); }
+  .band-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .band-head .dot { width: 10px; height: 10px; border-radius: 3px; flex: none; align-self: center; }
+  .band-head h3 { margin: 0; font-size: 1rem; font-weight: 600; }
+  .band-head .meta { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
+  .band-head .by {
+    margin-left: auto; font-size: 0.66rem; font-family: var(--font-mono);
+    color: var(--text-muted); border: 1px solid var(--surface-3);
+    border-radius: 999px; padding: 2px 9px; white-space: nowrap;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip {
+    background: var(--surface-1); border: 1px solid var(--surface-3);
+    border-radius: 8px; padding: 7px 11px; min-width: 0;
+  }
+  .chip .ct { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-primary); display: block; }
+  .chip .cs { font-size: 0.68rem; color: var(--text-muted); display: block; margin-top: 2px; }
+  .chip .cnum { color: var(--accent); }
+
+  .row2 { display: grid; grid-template-columns: 2.5fr 1fr; gap: 16px; align-items: stretch; }
+  .ext-link { display: flex; align-items: center; justify-content: center; }
+  .ext-link .lbl {
+    font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent);
+    border: 1px dashed var(--accent); border-radius: 6px; padding: 3px 8px;
+    text-align: center; line-height: 1.35;
+  }
+
+  .connector { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 8px 0; }
+  .connector .clabel {
+    font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-secondary);
+    background: var(--surface-1); border: 1px solid var(--surface-3);
+    border-radius: 6px; padding: 3px 10px; margin-bottom: 2px;
+  }
+  .connector .line { width: 2px; height: 13px; background: var(--accent); }
+  .connector .head { width: 0; height: 0; border-left: 6px solid transparent;
+    border-right: 6px solid transparent; border-top: 8px solid var(--accent); }
+
+  .subhead { margin: 28px 0 12px; font-size: 0.74rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700;
+    display: flex; align-items: center; gap: 12px; }
+  .subhead::after { content: ""; flex: 1; height: 1px; background: var(--surface-3); }
+
+  footer.page { margin-top: 60px; padding-top: 18px; border-top: 1px solid var(--surface-3);
+    color: var(--text-muted); font-size: 0.78rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+  /* ── Entrance animation (deck fadeUp), reduced-motion safe ──────────── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  .rise { animation: fadeUp 520ms cubic-bezier(.4,0,.2,1) both; }
+  .r1 { animation-delay: .04s; } .r2 { animation-delay: .12s; } .r3 { animation-delay: .20s; }
+  .r4 { animation-delay: .28s; } .r5 { animation-delay: .36s; }
+  @media (prefers-reduced-motion: reduce) { .rise { animation: none; } }
+
+  /* ── Print: force light, drop into the written thesis ───────────────── */
+  @media print {
+    :root {
+      --surface-0: #ffffff; --surface-1: #f7f7f8; --surface-2: #eeeeef; --surface-3: #cfcfd4;
+      --accent: #1a1a1a; --accent-muted: #ececec;
+      --text-primary: #111114; --text-secondary: #3f3f46; --text-muted: #6b6b73;
+    }
+    body { background: #fff; }
+    body::before, .theme-toggle { display: none; }
+    header.hero h1 { -webkit-text-fill-color: var(--text-primary); }
+    .figure, .band, .legend { box-shadow: none; }
+    .rise { animation: none; }
+    section.view { page-break-inside: avoid; }
+  }
+
+  @media (max-width: 760px) { .row2 { grid-template-columns: 1fr; } header.hero h1 { font-size: 2.4rem; } }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- ── Hero / title ─────────────────────────────────────────────────── -->
+  <header class="hero rise">
+    <div class="kicker">Bachelor Thesis · University of Innsbruck</div>
+    <h1>Aeriscalus</h1>
+    <p class="lede">
+      A multi-agent, retrieval-augmented (RAG) system for generating and validating
+      <strong>grounded</strong> Gherkin <code>.feature</code> test scenarios for small
+      unmanned aircraft (sUAS). Three coordinated views: system context, component
+      architecture, and the agentic LangGraph workflow.
+    </p>
+    <div class="credits">
+      <span class="name">Lucas Griesser</span><span class="sep">·</span>
+      <span class="name">Michael Prokop</span>
+      <span class="sep">·</span>
+      <span class="sup">Supervisor — Michael Vierhauser</span>
+    </div>
+
+    <button class="theme-toggle" id="themeToggle" title="Toggle light / dark theme" aria-label="Toggle light/dark theme">
+      <svg class="sun" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
+      </svg>
+      <svg class="moon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ── Tech stack ───────────────────────────────────────────────────── -->
+  <div class="stack rise r1">
+    <span class="pill">Python 3.12</span>
+    <span class="pill">FastAPI</span>
+    <span class="pill">LangGraph</span>
+    <span class="pill">LangChain</span>
+    <span class="pill">ChromaDB</span>
+    <span class="pill">MiniLM-L6-v2</span>
+    <span class="pill">MCP / FastMCP</span>
+    <span class="pill">Next.js 16</span>
+    <span class="pill">React 19</span>
+    <span class="pill">Tailwind CSS 4</span>
+    <span class="pill">Zustand</span>
+    <span class="pill">Docker Compose</span>
+  </div>
+
+  <!-- ── Legend ───────────────────────────────────────────────────────── -->
+  <div class="legend rise r2">
+    <div class="group">
+      <h4>Node type</h4>
+      <div class="row">
+        <span class="item"><span class="swatch" style="border-color:var(--status-info)"></span> Retrieval</span>
+        <span class="item"><span class="swatch" style="border-color:var(--accent)"></span> LLM agent</span>
+        <span class="item"><span class="swatch" style="border-color:var(--status-warning)"></span> Human-in-the-loop</span>
+        <span class="item"><span class="swatch" style="border-color:var(--status-success)"></span> Terminal / output</span>
+        <span class="item"><span class="swatch" style="border-color:var(--text-muted);border-style:dashed"></span> External system</span>
+      </div>
+    </div>
+    <div class="group">
+      <h4>Edge type</h4>
+      <div class="row">
+        <span class="item"><span class="ln" style="border-color:var(--text-secondary)"></span> Main flow</span>
+        <span class="item"><span class="ln" style="border-color:var(--status-warning);border-top-style:dashed"></span> Inner loop</span>
+        <span class="item"><span class="ln" style="border-color:var(--accent);border-top-style:dashed"></span> Outer loop</span>
+        <span class="item"><span class="ln" style="border-color:var(--status-success)"></span> Approve</span>
+        <span class="item"><span class="ln" style="border-color:var(--status-error);border-top-style:dashed"></span> Reject / exit</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ VIEW 1 — CONTEXT ════════════════════════ -->
+  <section class="view rise r3">
+    <div class="view-head"><span class="num">VIEW 1</span><h2>System Context</h2></div>
+    <p class="cap">
+      The system boundary and the external actors and services it interacts with.
+      A QA engineer drives Aeriscalus through the Web UI or the CLI; the engine calls a
+      cloud LLM provider, grounds scenarios against real aviation-safety incidents, and
+      emits validated <code>.feature</code> files for downstream drone simulators.
+    </p>
+    <div class="figure">
+      <svg viewBox="0 0 1120 520" role="img" aria-label="System context diagram">
+        <defs>
+          <marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/>
+          </marker>
+        </defs>
+
+        <!-- Actor -->
+        <rect class="node n-term" x="40" y="205" width="160" height="100" rx="12"/>
+        <text class="n-big" x="120" y="248" text-anchor="middle">QA / Test</text>
+        <text class="n-big" x="120" y="268" text-anchor="middle">Engineer</text>
+        <text class="n-sub" x="120" y="290" text-anchor="middle">human user</text>
+
+        <!-- Entry interfaces -->
+        <rect class="node n-info" x="255" y="120" width="185" height="72" rx="10"/>
+        <text class="n-title" x="347" y="152" text-anchor="middle">Web UI</text>
+        <text class="n-sub" x="347" y="170" text-anchor="middle">Next.js · localhost:3000</text>
+
+        <rect class="node n-info" x="255" y="320" width="185" height="72" rx="10"/>
+        <text class="n-title" x="347" y="352" text-anchor="middle">CLI</text>
+        <text class="n-sub" x="347" y="370" text-anchor="middle">dronetestgen (Click)</text>
+
+        <!-- System boundary -->
+        <rect class="boundary" x="500" y="70" width="200" height="380" rx="14"/>
+        <text class="bnd-label" x="510" y="92">Aeriscalus</text>
+        <rect class="node n-accent" x="520" y="180" width="160" height="160" rx="12"/>
+        <text class="n-big" x="600" y="218" text-anchor="middle">Core Engine</text>
+        <text class="n-sub" x="600" y="244" text-anchor="middle">Multi-agent</text>
+        <text class="n-sub" x="600" y="260" text-anchor="middle">RAG pipeline</text>
+        <text class="n-sub" x="600" y="276" text-anchor="middle">FastAPI · LangGraph</text>
+        <text class="n-sub" x="600" y="292" text-anchor="middle">MCP · ChromaDB</text>
+        <text class="n-sub" x="600" y="316" text-anchor="middle">Gherkin generator</text>
+
+        <!-- External systems -->
+        <rect class="node n-accent" x="770" y="95" width="310" height="80" rx="10" style="stroke-dasharray:6 5"/>
+        <text class="n-title" x="925" y="124" text-anchor="middle">LLM Providers</text>
+        <text class="n-sub" x="925" y="144" text-anchor="middle">Gemini-2.5-Flash (gen) · Pro (judge)</text>
+        <text class="n-sub" x="925" y="160" text-anchor="middle">OpenAI · Anthropic configurable</text>
+
+        <rect class="node n-info" x="770" y="215" width="310" height="90" rx="10" style="stroke-dasharray:6 5"/>
+        <text class="n-title" x="925" y="248" text-anchor="middle">Incident Data Sources</text>
+        <text class="n-sub" x="925" y="268" text-anchor="middle">NTSB API · FAA .xlsx</text>
+        <text class="n-sub" x="925" y="284" text-anchor="middle">AAIB · NASA ASRS</text>
+
+        <rect class="node n-ok" x="770" y="360" width="310" height="85" rx="10" style="stroke-dasharray:6 5"/>
+        <text class="n-title" x="925" y="392" text-anchor="middle">Drone Simulators (target)</text>
+        <text class="n-sub" x="925" y="412" text-anchor="middle">AirSim · Gazebo · PX4</text>
+        <text class="n-sub" x="925" y="428" text-anchor="middle">consume .feature files</text>
+
+        <!-- Edges -->
+        <path class="flow" marker-end="url(#ah1)" d="M200,240 C228,222 235,180 255,165"/>
+        <text class="e-label" x="222" y="196" text-anchor="middle">uses</text>
+
+        <path class="flow" marker-end="url(#ah1)" d="M200,270 C228,300 235,340 255,352"/>
+        <text class="e-label" x="222" y="322" text-anchor="middle">runs</text>
+
+        <path class="flow" marker-end="url(#ah1)" d="M440,156 C480,156 482,220 520,224"/>
+        <text class="e-label" x="478" y="184" text-anchor="middle">HTTP + SSE</text>
+
+        <path class="flow" marker-end="url(#ah1)" d="M440,356 C480,356 482,300 520,296"/>
+        <text class="e-label" x="478" y="340" text-anchor="middle">in-process</text>
+
+        <path class="flow" marker-start="url(#ah1)" marker-end="url(#ah1)" d="M680,210 C724,200 730,150 770,140"/>
+        <text class="e-label" x="730" y="170" text-anchor="middle">LLM API</text>
+
+        <path class="flow" marker-end="url(#ah1)" d="M680,255 C716,255 740,258 770,258"/>
+        <text class="e-label" x="725" y="247" text-anchor="middle">fetch (MCP)</text>
+
+        <path class="flow" marker-end="url(#ah1)" d="M680,312 C724,330 738,392 770,398"/>
+        <text class="e-label" x="742" y="356" text-anchor="middle">produces .feature</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ VIEW 2 — COMPONENTS ═════════════════════ -->
+  <section class="view rise r3">
+    <div class="view-head"><span class="num">VIEW 2</span><h2>Component / Container Architecture</h2></div>
+    <p class="cap">
+      The internal layering of the system, top to bottom along the request path:
+      client → API → orchestration → tools → data. External services sit to the right
+      of the layer that calls them. The badge on each layer marks the thesis contributor
+      who built it. The two boxes at the bottom run offline and are not part of the
+      interactive request path.
+    </p>
+    <div class="figure">
+      <div class="layers">
+
+        <!-- Client layer -->
+        <div class="row2">
+          <div class="band">
+            <div class="band-head">
+              <span class="dot" style="background:var(--status-info)"></span>
+              <h3>Frontend</h3>
+              <span class="meta">Next.js 16 · React 19 · Tailwind 4 · Zustand &nbsp;|&nbsp; :3000</span>
+              <span class="by">M. Prokop</span>
+            </div>
+            <div class="chips">
+              <div class="chip"><span class="ct">Header · Sidebar</span><span class="cs">layout, sessions, theme</span></div>
+              <div class="chip"><span class="ct">Chat</span><span class="cs">ChatInput · MessageBubble</span></div>
+              <div class="chip"><span class="ct">ReviewPanel</span><span class="cs">GherkinViewer · CriticReportCard · ScoreGauge · ActionButtons</span></div>
+              <div class="chip"><span class="ct">KnowledgePanel</span><span class="cs">KB status / browse</span></div>
+              <div class="chip"><span class="ct">SetupWizard</span><span class="cs">first-run config</span></div>
+              <div class="chip"><span class="ct">useSSE · lib/api.ts</span><span class="cs">stores/sessionStore.ts</span></div>
+            </div>
+          </div>
+          <div class="band">
+            <div class="band-head">
+              <span class="dot" style="background:var(--status-info)"></span>
+              <h3>CLI</h3>
+              <span class="meta">Click · Rich</span>
+            </div>
+            <div class="chips">
+              <div class="chip"><span class="ct">generate</span><span class="cs">run a prompt</span></div>
+              <div class="chip"><span class="ct">ingest</span><span class="cs">build the KB</span></div>
+              <div class="chip"><span class="ct">evaluate</span><span class="cs">run experiments</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="connector"><span class="clabel">HTTP + SSE&nbsp;&nbsp;·&nbsp;&nbsp;CLI in-process</span><span class="line"></span><span class="head"></span></div>
+
+        <!-- API layer -->
+        <div class="band">
+          <div class="band-head">
+            <span class="dot" style="background:var(--accent)"></span>
+            <h3>Backend API</h3>
+            <span class="meta">FastAPI · src/api/main.py &nbsp;|&nbsp; :8000 &nbsp;|&nbsp; CORS · health · Prometheus /metrics</span>
+          </div>
+          <div class="chips">
+            <div class="chip"><span class="ct">routers/sessions</span><span class="cs">CRUD sessions</span></div>
+            <div class="chip"><span class="ct">routers/generate</span><span class="cs">POST start run</span></div>
+            <div class="chip"><span class="ct">routers/stream</span><span class="cs">GET SSE events</span></div>
+            <div class="chip"><span class="ct">routers/feedback</span><span class="cs">human decision</span></div>
+            <div class="chip"><span class="ct">routers/knowledge</span><span class="cs">KB management</span></div>
+            <div class="chip"><span class="ct">services/workflow_runner</span><span class="cs">drives the graph, emits events</span></div>
+            <div class="chip"><span class="ct">services/session_manager</span><span class="cs">in-memory session store</span></div>
+          </div>
+        </div>
+
+        <div class="connector"><span class="clabel">invoke compiled workflow (async)</span><span class="line"></span><span class="head"></span></div>
+
+        <!-- Orchestration layer + LLM external -->
+        <div class="row2">
+          <div class="band">
+            <div class="band-head">
+              <span class="dot" style="background:var(--accent)"></span>
+              <h3>Orchestration</h3>
+              <span class="meta">LangGraph · LangChain &nbsp;|&nbsp; src/graph/ &nbsp;·&nbsp; src/agents/</span>
+              <span class="by">L. Griesser · M. Prokop</span>
+            </div>
+            <div class="chips">
+              <div class="chip"><span class="ct">workflow.py</span><span class="cs">StateGraph + MemorySaver</span></div>
+              <div class="chip"><span class="ct">state.py</span><span class="cs">GraphState (TypedDict)</span></div>
+              <div class="chip"><span class="ct">routing.py</span><span class="cs">route_after_critic / _human</span></div>
+              <div class="chip"><span class="ct">generator.py</span><span class="cs">Gemini-2.5-Flash · temp 0</span></div>
+              <div class="chip"><span class="ct">critic.py</span><span class="cs">Auto-Critic · 7-dimension report</span></div>
+              <div class="chip"><span class="ct">create_llm()</span><span class="cs">provider factory</span></div>
+            </div>
+          </div>
+          <div class="band ext">
+            <div class="band-head">
+              <span class="dot" style="background:var(--accent)"></span>
+              <h3>LLM Providers</h3>
+            </div>
+            <div class="chips">
+              <div class="chip"><span class="ct">Gemini-2.5-Flash</span><span class="cs">generator + critic</span></div>
+              <div class="chip"><span class="ct">Gemini-2.5-Pro</span><span class="cs">LLM-as-judge (eval)</span></div>
+              <div class="chip"><span class="ct">OpenAI · Anthropic</span><span class="cs">via LLM_PROVIDER env</span></div>
+            </div>
+            <div class="ext-link" style="margin-top:10px"><span class="lbl">← LLM API →</span></div>
+          </div>
+        </div>
+
+        <div class="connector"><span class="clabel">MCP tool calls (stdio · langchain-mcp-adapters)</span><span class="line"></span><span class="head"></span></div>
+
+        <!-- MCP layer + incident sources external -->
+        <div class="row2">
+          <div class="band">
+            <div class="band-head">
+              <span class="dot" style="background:var(--accent)"></span>
+              <h3>MCP Servers</h3>
+              <span class="meta">FastMCP · stdio &nbsp;|&nbsp; src/mcp_servers/</span>
+              <span class="by">L. Griesser</span>
+            </div>
+            <div class="chips">
+              <div class="chip"><span class="ct">kb_search</span><span class="cs">search_tech_specs · search_incidents · search_examples · search_rules</span></div>
+              <div class="chip"><span class="ct">incident_acquisition</span><span class="cs">fetch_incident_record · sync (FAA · NTSB · AAIB · ASRS)</span></div>
+              <div class="chip"><span class="ct">file_output</span><span class="cs">write_scenario · list_files</span></div>
+            </div>
+          </div>
+          <div class="band ext">
+            <div class="band-head">
+              <span class="dot" style="background:var(--status-info)"></span>
+              <h3>Incident Sources</h3>
+            </div>
+            <div class="chips">
+              <div class="chip"><span class="ct">NTSB · FAA · AAIB · ASRS</span><span class="cs">public aviation safety data</span></div>
+            </div>
+            <div class="ext-link" style="margin-top:10px"><span class="lbl">HTTPS / files</span></div>
+          </div>
+        </div>
+
+        <div class="connector"><span class="clabel">vector query&nbsp;&nbsp;·&nbsp;&nbsp;read / write</span><span class="line"></span><span class="head"></span></div>
+
+        <!-- Data layer -->
+        <div class="band">
+          <div class="band-head">
+            <span class="dot" style="background:var(--status-success)"></span>
+            <h3>Data &amp; Storage</h3>
+            <span class="meta">src/knowledge/ &nbsp;·&nbsp; ./data &nbsp;·&nbsp; ./output</span>
+            <span class="by">L. Griesser</span>
+          </div>
+          <div class="chips">
+            <div class="chip"><span class="ct">ChromaDB · 4 indices</span><span class="cs">tech_specs <span class="cnum">46</span> · incidents <span class="cnum">747</span> · examples <span class="cnum">3</span> · rules <span class="cnum">31</span> = <span class="cnum">827</span> chunks</span></div>
+            <div class="chip"><span class="ct">Embeddings</span><span class="cs">sentence-transformers all-MiniLM-L6-v2</span></div>
+            <div class="chip"><span class="ct">SQLite cache</span><span class="cs">incident downloads</span></div>
+            <div class="chip"><span class="ct">output/*.feature</span><span class="cs">generated Gherkin + provenance</span></div>
+          </div>
+        </div>
+
+        <div class="subhead">Offline / support — not in the interactive request path</div>
+
+        <div class="row2" style="grid-template-columns:1fr 1fr">
+          <div class="band ext">
+            <div class="band-head">
+              <span class="dot" style="background:var(--text-muted)"></span>
+              <h3>Ingestion pipeline</h3>
+              <span class="meta">src/ingestion/</span>
+              <span class="by">L. Griesser</span>
+            </div>
+            <div class="chips">
+              <div class="chip"><span class="ct">loaders → chunkers</span><span class="cs">markdown · feature · rules</span></div>
+              <div class="chip"><span class="ct">metadata.py</span><span class="cs">frontmatter → ChromaDB (827 chunks)</span></div>
+            </div>
+          </div>
+          <div class="band ext">
+            <div class="band-head">
+              <span class="dot" style="background:var(--text-muted)"></span>
+              <h3>Evaluation harness</h3>
+              <span class="meta">src/evaluation/</span>
+              <span class="by">M. Prokop</span>
+            </div>
+            <div class="chips">
+              <div class="chip"><span class="ct">baselines</span><span class="cs">naive_llm (no RAG)</span></div>
+              <div class="chip"><span class="ct">metrics M1–M6</span><span class="cs">syntax · parameters · ISO 29119 · grounding · efficiency · traceability</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ VIEW 3 — WORKFLOW ═══════════════════════ -->
+  <section class="view rise r3">
+    <div class="view-head"><span class="num">VIEW 3</span><h2>Agentic Workflow — LangGraph state machine</h2></div>
+    <p class="cap">
+      The core contribution: a five-node state machine with two nested feedback loops.
+      The <strong>inner loop</strong> (amber) regenerates until the Auto-Critic passes all
+      seven dimensions or the iteration cap is hit; the <strong>outer loop</strong> (light)
+      lets the human reviewer send the draft back for fresh retrieval. Node names and
+      routing keys match <code>src/graph/workflow.py</code> and <code>src/graph/routing.py</code>.
+    </p>
+    <div class="figure">
+      <svg viewBox="0 0 1100 640" role="img" aria-label="LangGraph workflow state machine">
+        <defs>
+          <marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/>
+          </marker>
+        </defs>
+
+        <!-- ── Loop / branch edges (drawn first, under the nodes) ── -->
+        <path class="loop loop-inner" marker-end="url(#ah3)" d="M630,351 L700,351 L700,233 L632,233"/>
+        <text class="lane-label ll-inner" transform="rotate(-90 716 292)" x="716" y="292" text-anchor="middle">regenerate · inner loop ≤ 3</text>
+
+        <path class="loop loop-inner" marker-end="url(#ah3)" d="M445,468 L398,468 L398,233 L458,233"/>
+        <text class="lane-label ll-inner" transform="rotate(-90 382 360)" x="382" y="360" text-anchor="middle">iterate · reset inner</text>
+
+        <path class="loop loop-outer" marker-end="url(#ah3)" d="M445,488 L348,488 L348,115 L458,115"/>
+        <text class="lane-label ll-outer" transform="rotate(-90 332 300)" x="332" y="300" text-anchor="middle">revise · outer loop ≤ 2</text>
+
+        <path class="edge-reject" marker-end="url(#ah3)" d="M545,504 L545,577 L795,577"/>
+        <text class="e-label" x="640" y="569" text-anchor="middle" style="fill:var(--status-error)">reject</text>
+
+        <path class="edge-approve" marker-end="url(#ah3)" d="M645,468 L765,468"/>
+        <text class="e-label" x="705" y="459" text-anchor="middle" style="fill:var(--status-success)">approve</text>
+
+        <!-- ── Main flow edges ── -->
+        <path class="flow" marker-end="url(#ah3)" d="M545,54 L545,86"/>
+        <path class="flow" marker-end="url(#ah3)" d="M545,144 L545,204"/>
+        <text class="e-label" x="545" y="178" text-anchor="middle">retrieved context</text>
+        <path class="flow" marker-end="url(#ah3)" d="M545,262 L545,322"/>
+        <text class="e-label" x="545" y="296" text-anchor="middle">draft</text>
+        <path class="flow" marker-end="url(#ah3)" d="M545,380 L545,440"/>
+        <text class="e-label" x="545" y="414" text-anchor="middle">human_review · pass / max</text>
+        <path class="edge-approve" marker-end="url(#ah3)" d="M845,500 L845,560"/>
+        <text class="e-label" x="845" y="535" text-anchor="middle">write .feature</text>
+
+        <!-- ── Nodes ── -->
+        <rect class="node n-term" x="487" y="20" width="116" height="34" rx="17"/>
+        <text class="n-title" x="545" y="42" text-anchor="middle">START</text>
+
+        <rect class="node n-info" x="460" y="86" width="170" height="58" rx="10"/>
+        <text class="n-title" x="545" y="111" text-anchor="middle">RETRIEVE</text>
+        <text class="n-sub" x="545" y="129" text-anchor="middle">retrieve_node · kb_search</text>
+
+        <rect class="node n-accent" x="460" y="204" width="170" height="58" rx="10"/>
+        <text class="n-title" x="545" y="229" text-anchor="middle">GENERATE</text>
+        <text class="n-sub" x="545" y="247" text-anchor="middle">generator.py · Gemini-2.5-Flash</text>
+
+        <rect class="node n-accent" x="460" y="322" width="170" height="58" rx="10"/>
+        <text class="n-title" x="545" y="347" text-anchor="middle">CRITIQUE</text>
+        <text class="n-sub" x="545" y="365" text-anchor="middle">critic.py · 7-dim report</text>
+
+        <rect class="node n-warn" x="445" y="438" width="200" height="64" rx="10"/>
+        <text class="n-title" x="545" y="466" text-anchor="middle">HUMAN_GATE</text>
+        <text class="n-sub" x="545" y="484" text-anchor="middle">interrupt() · await review</text>
+
+        <rect class="node n-ok" x="765" y="439" width="160" height="58" rx="10"/>
+        <text class="n-title" x="845" y="464" text-anchor="middle">FINALIZE</text>
+        <text class="n-sub" x="845" y="482" text-anchor="middle">metadata + write file</text>
+
+        <rect class="node n-term" x="797" y="560" width="96" height="34" rx="17"/>
+        <text class="n-title" x="845" y="582" text-anchor="middle">END</text>
+
+        <!-- routing annotations -->
+        <text class="annot" x="660" y="402" text-anchor="start">route_after_critic()</text>
+        <text class="annot" x="455" y="524" text-anchor="start">route_after_human()</text>
+      </svg>
+
+      <div class="stats">
+        <div class="stat"><b>1.15</b><span>mean inner iterations</span></div>
+        <div class="stat"><b>87.5%</b><span>pass critique on first try</span></div>
+        <div class="stat"><b>≈30.5 s</b><span>wall-clock / scenario</span></div>
+        <div class="stat"><b>≈11 ms</b><span>MCP retrieval latency</span></div>
+        <div class="stat"><b>7</b><span>critic dimensions</span></div>
+      </div>
+    </div>
+    <p class="cap" style="margin-top:14px">
+      <strong>Auto-Critic dimensions:</strong> Gherkin syntax · parameter plausibility ·
+      ISO 29119 compliance · retrieval grounding · incident traceability · completeness ·
+      scenario-coverage. All seven must pass for the draft to advance to the human gate.
+    </p>
+  </section>
+
+  <footer class="page">
+    <span>Aeriscalus · Bachelor thesis architecture reference — self-contained HTML.</span>
+    <span>Toggle theme ↗ &nbsp;·&nbsp; Print → forces light mode for the written thesis.</span>
+  </footer>
+
+</div>
+
+<script>
+  // Theme toggle — mirrors frontend/src/components/ui/ThemeToggle.tsx
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var toLight = !document.documentElement.classList.contains("light");
+    document.documentElement.className = toLight ? "light" : "dark";
+    try { localStorage.setItem("aeriscalus-theme", toLight ? "light" : "dark"); } catch (e) {}
+  });
+</script>
+</body>
+</html>

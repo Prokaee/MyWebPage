@@ -5,6 +5,6 @@ export const meta = {
   phone: "+43 660 650 3435",
   github: "https://github.com/Prokaee",
   linkedin: "https://linkedin.com/in/michael-prokop-software",
-  status: "Bachelorarbeit zu Multi-Agenten-Systemen",
+  status: "Wiss. Mitarbeiter · Uni Innsbruck · n8n-Workshops",
   location: "Innsbruck, Österreich",
 };

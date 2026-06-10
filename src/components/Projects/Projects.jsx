@@ -40,7 +40,7 @@ export default function Projects() {
                       rel="noopener noreferrer"
                       className={styles.link}
                     >
-                      Zum Projekt &rarr;
+                      {project.linkLabel || "Zum Projekt →"}
                     </a>
                   )}
                 </div>
