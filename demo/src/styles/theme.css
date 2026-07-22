@@ -1,0 +1,128 @@
+/*
+ * ZENTRALE DESIGN-TOKENS  —  hier (und nur hier) Farben/Spacing/Radien aendern.
+ * Komponenten referenzieren ausschliesslich diese Variablen, nie rohe Hex-Werte.
+ * Stil: MONOCHROM (Schwarz/Weiss/Grau) + dezente Statusfarben (Rot/Gruen fuer
+ * Faellig/Bezahlt und Einnahmen/Ausgaben). Light + Dark ueber [data-theme] auf <html>.
+ */
+
+:root {
+  /* --- Marke / Interaktion (monochrom: Schwarz) --- */
+  --color-primary: #111114; /* Primaer-Buttons, FAB, aktive Tabs, aktive Nav */
+  --color-primary-hover: #000000;
+  --color-primary-contrast: #ffffff;
+  --color-brand-soft: #f0f0f2; /* heller Grau-Hintergrund (Auswahl) */
+
+  --color-accent: #111114; /* aktive Navigation = Schwarz */
+  --color-accent-soft: #f0f0f2;
+
+  --color-secondary-bg: #f0f0f2; /* Sekundaer-Buttons: helles Grau */
+  --color-secondary-text: #111114;
+
+  --color-ink: #111114; /* dunkle Deko-Flaechen: Avatar, "scannen"-Karte */
+  --color-ink-contrast: #ffffff;
+
+  /* --- Neutrale Flaechen & Text --- */
+  --color-bg: #ffffff;
+  --color-surface: #f4f4f5;
+  --color-surface-2: #fafafa;
+  --color-border: #e6e6e9;
+  --color-text: #111114;
+  --color-text-muted: #6b6b74;
+  --color-text-faint: #a0a0a8;
+  --color-app-bg: #eaeaec;
+
+  /* --- Finanz-Semantik / Status (dezent) --- */
+  --color-income: #1f9d63; /* Einnahmen: gedaempftes Gruen */
+  --color-expense: #e0455f; /* Ausgaben: gedaempftes Rot */
+  --color-success: #1f9d63;
+  --color-success-soft: #e9f5ee;
+  --color-danger: #e0455f;
+  --color-danger-soft: #fdecef;
+  --color-warning: #6b6b74; /* "erkannt/offen": neutral grau statt Amber */
+  --color-warning-soft: #efeff1;
+
+  /* --- Radien --- */
+  --radius-card: 18px;
+  --radius-button: 13px;
+  --radius-pill: 999px;
+  --radius-input: 12px;
+
+  /* --- Spacing-Skala --- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* --- Typografie --- */
+  --font-family:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 20px;
+  --font-size-xl: 26px;
+  --font-size-2xl: 34px;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* --- Schatten (neutral) --- */
+  --shadow-card: 0 1px 3px rgba(17, 17, 20, 0.06);
+  --shadow-pop: 0 8px 30px rgba(17, 17, 20, 0.12);
+  --shadow-fab: 0 6px 18px rgba(17, 17, 20, 0.28);
+  --shadow-nav: 0 -1px 0 var(--color-border);
+
+  /* --- Motion --- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 130ms;
+  --dur: 220ms;
+
+  /* --- Layout --- */
+  --phone-max-width: 430px;
+  --bottom-nav-height: 64px; /* Hoehe des Docks */
+  --bottom-nav-inset: 14px; /* Abstand des schwebenden Docks vom Rand */
+  --bottom-nav-space: 94px; /* reservierter Platz unten (Dock + Inset + Safe-Area) */
+}
+
+:root[data-theme="dark"] {
+  --color-primary: #f2f2f5; /* Buttons hell auf dunkel */
+  --color-primary-hover: #ffffff;
+  --color-primary-contrast: #131317;
+  --color-brand-soft: #26262e;
+
+  --color-accent: #f7f7fa; /* aktive Nav = Weiss */
+  --color-accent-soft: #26262e;
+
+  --color-secondary-bg: #26262e;
+  --color-secondary-text: #f2f2f5;
+
+  --color-ink: #26262e; /* gehobene dunkle Flaeche */
+  --color-ink-contrast: #ffffff;
+
+  --color-bg: #131317;
+  --color-surface: #1e1e25;
+  --color-surface-2: #191920;
+  --color-border: #2c2c34;
+  --color-text: #f2f2f5;
+  --color-text-muted: #a2a2ac;
+  --color-text-faint: #6d6d77;
+  --color-app-bg: #0c0c0f;
+
+  --color-income: #35c17e;
+  --color-expense: #ff6b85;
+  --color-success: #35c17e;
+  --color-success-soft: #16321f;
+  --color-danger: #ff6b85;
+  --color-danger-soft: #3a2028;
+  --color-warning: #a2a2ac;
+  --color-warning-soft: #26262e;
+
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-pop: 0 8px 30px rgba(0, 0, 0, 0.5);
+  --shadow-fab: 0 6px 18px rgba(0, 0, 0, 0.55);
+}
