@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/demo",
+      "destination": "https://kathi-website.vercel.app/",
+      "permanent": true
+    },
+    {
+      "source": "/demo/:pfad*",
+      "destination": "https://kathi-website.vercel.app/",
+      "permanent": true
+    }
+  ]
+}

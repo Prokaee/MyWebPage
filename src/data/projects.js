@@ -11,6 +11,17 @@ export const projects = [
     featured: true,
   },
   {
+    id: "kathi-website",
+    year: "2026",
+    title: "Künstlerinnen-Portfolio mit eigenem CMS",
+    description:
+      "Website für eine Tiroler Künstlerin. Herzstück ist ein Hero, in dem sich ein Bleistiftporträt beim Scrollen über 12 Zeichenschritte selbst zeichnet — die Fotos sind dafür über gesetzte Augen- und Kinnpunkte pixelgenau zueinander ausgerichtet. Dazu ein Admin-Bereich, in dem sie Werke selbst fotografiert, per Eckpunkten entzerrt und veröffentlicht: Die Perspektivkorrektur und Farbanpassung laufen im Browser (Portierung einer Python-Pipeline nach JavaScript, verifiziert auf 0,01/255 Abweichung). Statisch ausgelieferte Seite mit ISR, die sich nach jeder Änderung gezielt neu aufbaut.",
+    tags: ["Astro", "TypeScript", "Postgres", "Vercel Blob", "Python", "Bildverarbeitung"],
+    link: "https://katharinalechner.at",
+    linkLabel: "Zur Website →",
+    featured: true,
+  },
+  {
     id: "f1-telemetry",
     year: "2026",
     title: "F1 Telemetry Challenge — Lange Nacht der Forschung",
