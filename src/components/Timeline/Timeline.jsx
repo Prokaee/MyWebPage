@@ -55,7 +55,6 @@ export default function Timeline() {
                               src={entry.images[0].src}
                               alt={entry.images[0].alt}
                               className={styles.previewImg}
-                              loading="lazy"
                             />
                           </motion.div>
                         )}
