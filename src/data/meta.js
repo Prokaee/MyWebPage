@@ -5,6 +5,6 @@ export const meta = {
   phone: "+43 660 650 3435",
   github: "https://github.com/Prokaee",
   linkedin: "https://linkedin.com/in/michael-prokop-software",
-  status: "Wiss. Mitarbeiter · Uni Innsbruck · n8n-Workshops",
+  status: "Best Bachelor Thesis Award 2025/26 · Uni Innsbruck",
   location: "Innsbruck, Österreich",
 };

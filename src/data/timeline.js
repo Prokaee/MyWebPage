@@ -1,6 +1,18 @@
 import malerei1 from "../assets/malerei1.jpg";
+import bachelorAward from "../assets/bachelor-award.jpg";
 
 export const timeline = [
+  {
+    period: "Nov 2026",
+    title: "Best Bachelor Thesis Award 2025/26",
+    institution: "Institut für Informatik, Universität Innsbruck",
+    description:
+      "Für die beste Bachelorarbeit des Jahres, gemeinsam mit Lucas Griesser: „Automated Support for Scenario-based Testing via MCP-supported Multi-Agent Architecture“.",
+    type: "auszeichnung",
+    images: [
+      { src: bachelorAward, alt: "Urkunde Best Bachelor Thesis Award 2025/26" },
+    ],
+  },
   {
     period: "Mai 2026 – heute",
     title: "Wissenschaftlicher Mitarbeiter",
