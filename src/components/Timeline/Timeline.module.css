@@ -140,3 +140,9 @@
     margin-bottom: 2px;
   }
 }
+
+.institution a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

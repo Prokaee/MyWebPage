@@ -3,6 +3,15 @@ import bachelorAward from "../assets/bachelor-award.jpg";
 
 export const timeline = [
   {
+    period: "Nov 2026 – heute",
+    title: "Gründer, Kontexo",
+    institution: "kontexo.at",
+    url: "https://kontexo.at/",
+    description:
+      "KI, angepasst an eure Firma: eine KI-Plattform für Firmen ab fünf Leuten, mit Wissen aus den eigenen Unterlagen, Agenten, Workflows und Anbindungen an Microsoft 365, Google und FinanzOnline. Aus Tirol, betrieben in der EU.",
+    type: "erfahrung",
+  },
+  {
     period: "Nov 2026",
     title: "Best Bachelor Thesis Award 2025/26",
     institution: "Institut für Informatik, Universität Innsbruck",

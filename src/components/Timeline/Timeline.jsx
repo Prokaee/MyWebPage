@@ -29,7 +29,11 @@ export default function Timeline() {
                 <div className={styles.right}>
                   <h3 className={styles.title} data-period={entry.period}>{entry.title}</h3>
                   <span className={styles.institution}>
-                    {entry.institution}
+                    {entry.url ? (
+                      <a href={entry.url} target="_blank" rel="noopener">{entry.institution}</a>
+                    ) : (
+                      entry.institution
+                    )}
                   </span>
                   {entry.description && (
                     <p className={styles.description}>{entry.description}</p>
